@@ -3,16 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cashier Dashboard - Canteleen</title>
+  <title>Cashier Interface - Canteleen</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header class="toolbar">
-    <div class="title">Canteleen - Cashier</div>
-  </header>
-  <main class="main-content">
-    <h1>Welcome, Cashier!</h1>
-    <!-- Additional cashier features can be added here -->
-  </main>
+  <div class="cashier-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <button onclick="showSection('guest-selection')"><img src="/images/guesticon.png" alt="Guest" class="sidebar-icon"></button>
+        <button onclick="showSection('home')"><img src="/images/homeicon.png" alt="Home" class="sidebar-icon"></button>
+        <button onclick="showSection('payment')"><img src="/images/payicon.png" alt="Pay" class="sidebar-icon"></button>
+      </div>
+      <div class="sidebar-bottom">
+        <hr>
+        <button onclick="showSection('profile')"><img src="/images/profileicon.png" alt="Profile" class="sidebar-icon"></button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="cashier-main">
+      <!-- Guest Selection (Initial View) -->
+      <section id="guest-selection" class="active-section">
+        <div class="search-bar">
+          <input type="text" placeholder="Search guests..." class="search-input">
+          <button class="search-btn">
+            <img src="/images/searchicon.png" alt="Search" class="search-icon">
+          </button>
+        </div>
+        <div class="guest-options-grid">
+          <div class="guest-option" data-discount="0.15">Student</div>
+          <div class="guest-option" data-discount="0.10">Teacher</div>
+          <div class="guest-option" data-discount="0.05">Staff</div>
+          <div class="guest-option" data-discount="0.00">Other</div>
+        </div>
+      </section>
+
+      <!-- Home Section -->
+      <section id="home" class="hidden-section">
+        <h2>Home Section</h2>
+        <p>Home interface content goes here...</p>
+      </section>
+
+      <!-- Payment Section -->
+      <section id="payment" class="hidden-section">
+        <h2>Payment Section</h2>
+        <p>Payment interface content goes here...</p>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profile" class="hidden-section">
+        <h2>Profile Section</h2>
+        <p>Profile interface content goes here...</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Show the selected section and hide others
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(section => {
+        section.style.display = section.id === sectionId ? 'block' : 'none';
+      });
+    }
+
+    // Guest Selection Logic
+    document.querySelectorAll('.guest-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const discount = this.getAttribute('data-discount');
+        sessionStorage.setItem('discount', discount);
+        showSection('home'); // Switch to home after selecting a guest
+      });
+    });
+
+    // Ensure the cashier starts in the guest selection view
+    document.addEventListener("DOMContentLoaded", () => {
+      showSection('guest-selection');
+    });
+  </script>
 </body>
 </html>

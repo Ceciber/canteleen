@@ -40,6 +40,7 @@ app.post('/login', (req, res) => {
 
 // Cashier dashboard page
 app.get('/cashier', (req, res) => {
+  console.log("Serving cashier.html");
   res.sendFile(path.join(__dirname, 'views', 'cashier.html'));
 });
 
