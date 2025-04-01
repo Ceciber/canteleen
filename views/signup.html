@@ -10,11 +10,18 @@
     <div class="form-container">
         <img src="/images/profile.png" alt="Profile" class="profile-img">
         <h2>SIGN UP</h2>
-        <input type="email" placeholder="E-mail" class="form-input">
-        <input type="text" placeholder="Username" class="form-input">
-        <input type="password" placeholder="Password" class="form-input">
-        <input type="password" placeholder="Repeat Password" class="form-input">
-        <button class="form-btn">SIGN UP</button>
+        <form action="/signup" method="POST">
+            <input type="email" placeholder="E-mail" class="form-input" name="email" required>
+            <input type="text" placeholder="Username" class="form-input" name="username" required>
+            <input type="password" placeholder="Password" class="form-input" name="password" required>
+            <input type="password" placeholder="Repeat Password" class="form-input" name="repeat_password" required>
+            <select class="form-input" name="role" required>
+                <option value="">Select Role</option>
+                <option value="Manager">Manager</option>
+                <option value="Cashier">Cashier</option>
+            </select>
+            <button type="submit" class="form-btn">SIGN UP</button>
+        </form>
     </div>
 </body>
 </html>

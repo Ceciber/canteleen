@@ -194,10 +194,14 @@
           </div>
         </div>
 
-        <!-- "Erase account" text at the bottom -->
-        <div class="erase-account">
-          <p>Erase account</p>
+        <!-- Erase Account and Log out Section -->
+        <div class="account-actions">
+          <p class="action-link" onclick="eraseAccount()">Erase account</p>
+          <p class="action-link" onclick="logout()">Log out</p>
         </div>
+        
+
+        
       </section>
 
     </main>
@@ -209,7 +213,12 @@
       document.querySelectorAll('section').forEach(section => {
         section.style.display = section.id === sectionId ? 'block' : 'none';
       });
+    
+      if (sectionId === 'profile') {
+        loadProfile(); // 👈 Load from DB when switching to profile
+      }
     }
+    
 
     // Ensure the manager starts in the menu view
     document.addEventListener("DOMContentLoaded", () => {
@@ -217,23 +226,83 @@
     });
 
     // Toggle between edit and save mode for profile editing
-    function toggleProfileEdit() {
+    async function toggleProfileEdit() {
       const inputs = document.querySelectorAll('.profile-field input');
       const editBtn = document.querySelector('.profile-edit-btn button');
-
+    
       if (editBtn.textContent === "Edit") {
         inputs.forEach(input => input.disabled = false);
         editBtn.textContent = "Save";
       } else {
-        let updatedProfile = {};
-        inputs.forEach(input => {
-          updatedProfile[input.id] = input.value;
-          input.disabled = true;
-        });
-        editBtn.textContent = "Edit";
-
+        // Collect updated profile info
+        const updatedProfile = {
+          full_name: document.getElementById('edit-fullname').value,
+          gender: document.getElementById('edit-gender').value,
+          country: document.getElementById('edit-country').value,
+          language: document.getElementById('edit-language').value,
+          email: document.getElementById('edit-email').value
+        };
+    
+        try {
+          const res = await fetch('/profile/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedProfile)
+          });
+          if (res.ok) {
+            document.getElementById('profile-fullname').textContent = updatedProfile.full_name;
+            document.getElementById('profile-email').textContent = updatedProfile.email;
+            editBtn.textContent = "Edit";
+            inputs.forEach(input => input.disabled = true);
+          } else {
+            alert("Error updating profile");
+          }
+        } catch (err) {
+          console.error("Update failed:", err);
+        }
       }
     }
+
+    async function loadProfile() {
+      try {
+        const res = await fetch('/profile');
+        const user = await res.json();
+    
+        document.getElementById('profile-username').textContent = user.username || '';
+        document.getElementById('profile-fullname').textContent = user.full_name || '';
+        document.getElementById('profile-email').textContent = user.email || '';
+        document.getElementById('profile-role').textContent = user.role || '';
+    
+        document.getElementById('edit-fullname').value = user.full_name || '';
+        document.getElementById('edit-username').value = user.username || '';
+        document.getElementById('edit-gender').value = user.gender || '';
+        document.getElementById('edit-country').value = user.country || '';
+        document.getElementById('edit-language').value = user.language || 'English';
+        document.getElementById('edit-email').value = user.email || '';
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+      }
+    }
+    async function eraseAccount() {
+      if (confirm("Are you sure you want to erase your account? This cannot be undone.")) {
+        try {
+          const res = await fetch('/profile/delete', { method: 'POST' });
+          if (res.ok) {
+            window.location.href = '/';
+          } else {
+            alert("Error deleting account.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Error deleting account.");
+        }
+      }
+    }
+    
+    function logout() {
+      window.location.href = '/logout';
+    }
+    
 
   </script>
 </body>

@@ -237,3 +237,26 @@ body {
     margin: 0;
     max-width: 400px; /* Match your content width */
 }
+
+.account-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .account-actions .action-link {
+    color: red;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin: 0;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .account-actions .action-link:hover {
+    background-color: #ffe5e5;
+  }
+  

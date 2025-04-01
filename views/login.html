@@ -11,10 +11,20 @@
     <img src="/images/profile.png" alt="Profile" class="profile-img">
     <h2>LOGIN</h2>
     <form action="/login" method="POST">
-      <input type="text" placeholder="Username" class="form-input" name="username" required>
-      <input type="password" placeholder="Password" class="form-input" name="password" required>
+      <input type="text" placeholder="Username" class="form-input" name="username" id="username" required>
+      <input type="password" placeholder="Password" class="form-input" name="password" id="password" required>
       <button type="submit" class="form-btn">LOGIN</button>
     </form>
+    <p id="error-message" style="color: red; display: none;">Invalid username or password.</p>
   </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === '1') {
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('error-message').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
