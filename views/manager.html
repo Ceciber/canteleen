@@ -24,9 +24,114 @@
     <main class="cashier-main">
       <!-- Menu Section -->
       <section id="menu" class="active-section">
-        <h2>Menu Section</h2>
-        <p>This is the placeholder for the menu interface.</p>
+        <!-- Search Bar and Add Dish Button -->
+        <div class="menu-top">
+          <input type="text" placeholder="Search dishes..." class="menu-search-input">
+          <button class="menu-add-btn" onclick="window.location.href='/adddish'">Add Dish</button>
+        </div>
+        
+        <!-- Tabs for Filtering -->
+        <div class="menu-tabs">
+          <button class="menu-tab" onclick="filterMeals('All')">All</button>
+          <button class="menu-tab" onclick="filterMeals('Meat')">Meat</button>
+          <button class="menu-tab" onclick="filterMeals('Vegetarian')">Vegetarian</button>
+          <button class="menu-tab" onclick="filterMeals('Fish')">Fish</button>
+          <button class="menu-tab" onclick="filterMeals('Dessert')">Dessert</button>
+        </div>
+        
+        <!-- Grid of Meal Tiles -->
+        <div class="menu-grid">
+          <!-- Tiles will be loaded dynamically -->
+        </div>
       </section>
+
+      <script>
+        async function loadMeals() {
+          try {
+            const response = await fetch('/meals');
+            const meals = await response.json();
+            const grid = document.querySelector('.menu-grid');
+            grid.innerHTML = '';
+            meals.forEach(meal => {
+              const tile = document.createElement('div');
+              tile.className = 'meal-tile';
+              tile.setAttribute('data-meal-type', meal.meal_type);
+              tile.setAttribute('data-meal-id', meal.id);
+              
+              const nameDiv = document.createElement('div');
+              nameDiv.className = 'meal-name';
+              nameDiv.textContent = meal.meal_name;
+              tile.appendChild(nameDiv);
+              
+              const actionsDiv = document.createElement('div');
+              actionsDiv.className = 'meal-actions';
+              
+              // Copy button
+              const copyBtn = document.createElement('button');
+              copyBtn.textContent = 'Copy';
+              copyBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}/copy`, { method: 'POST' });
+                if (res.ok) loadMeals();
+                else alert("Error copying meal");
+              };
+              actionsDiv.appendChild(copyBtn);
+              
+              // Modify button
+              const modifyBtn = document.createElement('button');
+              modifyBtn.textContent = 'Modify';
+              modifyBtn.onclick = () => {
+                window.location.href = `/modifydish?id=${meal.id}`;
+              };
+              actionsDiv.appendChild(modifyBtn);
+              
+              // Delete button
+              const deleteBtn = document.createElement('button');
+              deleteBtn.textContent = 'X';
+              deleteBtn.className = 'delete-btn';
+              deleteBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}`, { method: 'DELETE' });
+                if (res.ok) loadMeals();
+                else alert("Error deleting meal");
+              };
+              actionsDiv.appendChild(deleteBtn);
+              
+              tile.appendChild(actionsDiv);
+              grid.appendChild(tile);
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        function filterMeals(category) {
+          const tiles = document.querySelectorAll('.meal-tile');
+          tiles.forEach(tile => {
+            if (category === 'All' || tile.getAttribute('data-meal-type') === category)
+              tile.style.display = 'block';
+            else
+              tile.style.display = 'none';
+          });
+        }
+
+        function setupSearchBar() {
+          const searchInput = document.querySelector('.menu-search-input');
+          searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            document.querySelectorAll('.meal-tile').forEach(tile => {
+              const name = tile.querySelector('.meal-name').textContent.toLowerCase();
+              tile.style.display = name.includes(query) ? 'block' : 'none';
+            });
+          });
+        }
+        
+
+        document.addEventListener("DOMContentLoaded", () => {
+          loadMeals();
+          setupSearchBar(); // 👈 Add this line
+        });
+        
+      </script>
+
 
       <!-- Orders Section -->
       <section id="orders" class="hidden-section">
@@ -34,7 +139,6 @@
         <p>This is the placeholder for the orders interface.</p>
       </section>
 
-      <!-- Profile Section -->
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
         <!-- Profile header with welcome message -->

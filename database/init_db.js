@@ -34,9 +34,9 @@ db.run(`
     meal_name TEXT,
     meal_price REAL,
     meal_type TEXT,
-    ingredients TEXT, -- JSON list
-    nutrients TEXT, -- JSON object: { Calories: 500, Fat: 20, Sugar: 10 }
-    allergens TEXT -- JSON object: { Gluten: true, Dairy: false, ... }
+    ingredients TEXT, 
+    nutrients TEXT, 
+    allergens TEXT 
   )
 `);
 

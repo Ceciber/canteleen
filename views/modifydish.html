@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modify Dish - Canteleen Manager</title>
+  <link rel="stylesheet" href="/css/managerstyle.css">
+  <style>
+    /* Similar styles as Add Dish */
+    .adddish-container { padding: 20px; }
+    .adddish-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .adddish-header img { width: 50px; height: 50px; }
+    .adddish-header input[type="text"],
+    .adddish-header input[type="number"] { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .ingredients-list { display: flex; gap: 10px; margin-bottom: 20px; }
+    .ingredient-item { padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .add-ingredient-btn { padding: 10px 20px; background-color: #1e3a8a; color: white;
+      border: none; border-radius: 4px; cursor: pointer; }
+    .nutrients { display: flex; justify-content: space-around; margin-bottom: 20px; }
+    .nutrient { display: flex; flex-direction: column; align-items: center; }
+    .allergens { display: flex; gap: 20px; margin-bottom: 20px; justify-content: center; }
+    .allergens label { display: flex; align-items: center; gap: 5px; }
+    .validate-btn {
+      display: block; margin: 0 auto; padding: 10px 30px;
+      background-color: #1e3a8a; color: white; border: none; border-radius: 4px; cursor: pointer;
+    }
+    .ingredient-item {
+        position: relative;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      .ingredient-item:hover {
+        background-color: #ffdddd;
+      }
+      
+      .ingredient-item::after {
+        content: '✕';
+        position: absolute;
+        right: 8px;
+        top: 2px;
+        font-size: 12px;
+        color: red;
+        display: none;
+      }
+      
+      .ingredient-item:hover::after {
+        display: inline;
+      }
+      
+      /* New style to mark an ingredient as removed */
+      .ingredient-item.removed {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
+      
+      
+  </style>
+</head>
+<body>
+  <div class="adddish-container">
+    <!-- Header with icon, meal name, meal type and price -->
+    <div class="adddish-header">
+      <img src="/images/examplemealitem.png" alt="Meal Icon">
+      <input type="text" id="meal-name" placeholder="Meal Name">
+      <input type="text" id="meal-type" placeholder="Meal Type (e.g., Meat)">
+      <input type="number" id="meal-price" placeholder="Price">
+    </div>
+
+    <!-- Ingredients list -->
+    <div class="ingredients-section">
+      <div class="ingredients-list" id="ingredients-list">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="add-ingredient">
+        <input type="text" id="ingredient-input" placeholder="Add Ingredient">
+        <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
+      </div>
+    </div>
+
+    <!-- Nutrients fields -->
+    <div class="nutrients">
+      <div class="nutrient">
+        <label>Calories</label>
+        <input type="number" id="nutrient-calories" placeholder="0">
+      </div>
+      <div class="nutrient">
+        <label>Sugar</label>
+        <input type="number" id="nutrient-sugar" placeholder="0">
+      </div>
+      <div class="nutrient">
+        <label>Fat</label>
+        <input type="number" id="nutrient-fat" placeholder="0">
+      </div>
+    </div>
+
+    <!-- Allergens checkboxes -->
+    <div class="allergens">
+      <label><input type="checkbox" id="allergen-gluten"> Gluten</label>
+      <label><input type="checkbox" id="allergen-dairy"> Dairy</label>
+      <label><input type="checkbox" id="allergen-eggs"> Eggs</label>
+      <label><input type="checkbox" id="allergen-peanuts"> Peanuts</label>
+      <label><input type="checkbox" id="allergen-soy"> Soy</label>
+    </div>
+
+    <!-- Validate button -->
+    <button class="validate-btn" onclick="validateModification()">Validate</button>
+  </div>
+
+  <script>
+    let mealId = null;
+    function addIngredient() {
+        const ingredientInput = document.getElementById('ingredient-input');
+        const ingredient = ingredientInput.value.trim();
+        if (ingredient !== "") {
+          const list = document.getElementById('ingredients-list');
+          const ingredientElem = document.createElement('div');
+          ingredientElem.textContent = ingredient;
+          ingredientElem.className = 'ingredient-item';
+          ingredientElem.title = "Click to mark as removed";
+          // Toggle the 'removed' class on click instead of deleting it
+          ingredientElem.onclick = () => ingredientElem.classList.toggle('removed');
+          list.appendChild(ingredientElem);
+          ingredientInput.value = "";
+        }
+      }
+      
+      
+      
+
+    async function loadMealData() {
+      const urlParams = new URLSearchParams(window.location.search);
+      mealId = urlParams.get('id');
+      if (!mealId) { alert("No meal ID provided."); return; }
+      try {
+        const response = await fetch(`/meals/${mealId}`);
+        if (response.ok) {
+          const meal = await response.json();
+          document.getElementById('meal-name').value = meal.meal_name;
+          document.getElementById('meal-type').value = meal.meal_type;
+          document.getElementById('meal-price').value = meal.meal_price;
+          // Populate ingredients
+          const list = document.getElementById('ingredients-list');
+          list.innerHTML = "";
+          meal.ingredients.forEach(ing => {
+            const div = document.createElement('div');
+            div.textContent = ing;
+            div.className = 'ingredient-item';
+            // Toggle removed class on click (strikethrough effect)
+            div.onclick = () => div.classList.toggle('removed');
+            list.appendChild(div);
+          });
+          
+          // Populate nutrients
+          document.getElementById('nutrient-calories').value = meal.nutrients.Calories;
+          document.getElementById('nutrient-sugar').value = meal.nutrients.Sugar;
+          document.getElementById('nutrient-fat').value = meal.nutrients.Fat;
+          // Populate allergens
+          document.getElementById('allergen-gluten').checked = meal.allergens.Gluten;
+          document.getElementById('allergen-dairy').checked = meal.allergens.Dairy;
+          document.getElementById('allergen-eggs').checked = meal.allergens.Eggs;
+          document.getElementById('allergen-peanuts').checked = meal.allergens.Peanuts;
+          document.getElementById('allergen-soy').checked = meal.allergens.Soy;
+        } else {
+          alert("Failed to load meal data.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error loading meal data.");
+      }
+    }
+
+    async function validateModification() {
+      const mealName = document.getElementById('meal-name').value;
+      const mealType = document.getElementById('meal-type').value;
+      const mealPrice = parseFloat(document.getElementById('meal-price').value);
+      
+      // After: Only include ingredients that are not marked as removed
+      const ingredients = [];
+      document.querySelectorAll('#ingredients-list .ingredient-item').forEach(item => {
+        if (!item.classList.contains('removed')) {
+          ingredients.push(item.textContent);
+        }
+      });
+      
+
+      
+      
+      const nutrients = {
+        Calories: parseFloat(document.getElementById('nutrient-calories').value) || 0,
+        Sugar: parseFloat(document.getElementById('nutrient-sugar').value) || 0,
+        Fat: parseFloat(document.getElementById('nutrient-fat').value) || 0
+      };
+      
+      const allergens = {
+        Gluten: document.getElementById('allergen-gluten').checked,
+        Dairy: document.getElementById('allergen-dairy').checked,
+        Eggs: document.getElementById('allergen-eggs').checked,
+        Peanuts: document.getElementById('allergen-peanuts').checked,
+        Soy: document.getElementById('allergen-soy').checked
+      };
+      
+      const data = { meal_name: mealName, meal_type: mealType, meal_price: mealPrice, ingredients, nutrients, allergens };
+      
+      try {
+        const response = await fetch(`/meals/${mealId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (response.ok) {
+          window.location.href = '/manager';
+        } else {
+          alert("Error updating meal.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error updating meal.");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadMealData);
+  </script>
+</body>
+</html>
