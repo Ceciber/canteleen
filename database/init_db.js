@@ -6,41 +6,48 @@ const path = require('path');
 const dbPath = path.join(__dirname, 'canteleen.db');
 const db = new sqlite3.Database(dbPath);
 
-// Create Users table
-db.run(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE,
-    username TEXT UNIQUE,
-    password TEXT,
-    role TEXT CHECK(role IN ('cashier', 'manager')) NOT NULL
-  )
-`);
+// Drop tables (for dev reset — optional)
+db.serialize(() => {
+  db.run(`DROP TABLE IF EXISTS users`);
+  db.run(`DROP TABLE IF EXISTS meals`);
+  db.run(`DROP TABLE IF EXISTS orders`);
 
-// Create Meals table
-db.run(`
-  CREATE TABLE IF NOT EXISTS meals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    category TEXT,
-    price REAL NOT NULL,
-    description TEXT,
-    allergies TEXT
-  )
-`);
+  // Create User Profiles table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      full_name TEXT,
+      username TEXT UNIQUE,
+      gender TEXT,
+      country TEXT,
+      language TEXT,
+      email TEXT UNIQUE,
+      password TEXT
+    )
+  `);
 
-// Create Orders table
-db.run(`
-  CREATE TABLE IF NOT EXISTS orders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    items TEXT, -- comma-separated list of meal IDs or JSON string
-    total_price REAL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-  )
-`);
+  // Create Meals table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS meals (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      price REAL,
+      ingredients TEXT,  -- JSON Array
+      nutrients TEXT,    -- JSON Object { calories, fat, sugar }
+      allergens TEXT     -- JSON Object { gluten, dairy, eggs, peanuts, soy }
+    )
+  `);
 
-db.close(() => {
-  console.log('Database initialized and closed.');
+  // Create Orders table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS orders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      card_id INTEGER,
+      balance REAL,
+      items TEXT   -- JSON Array of Meal objects
+    )
+  `);
+
+  console.log('✅ All tables created successfully.');
+  db.close();
 });
