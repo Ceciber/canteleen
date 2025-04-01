@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Canteleen</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Canteleen</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="form-container">
-        <img src="/images/profile.png" alt="Profile" class="profile-img">
-        <h2>LOGIN</h2>
-        <input type="text" placeholder="Username" class="form-input">
-        <input type="password" placeholder="Password" class="form-input">
-        <button class="form-btn">LOGIN</button>
-    </div>
+  <div class="form-container">
+    <img src="/images/profile.png" alt="Profile" class="profile-img">
+    <h2>LOGIN</h2>
+    <form action="/login" method="POST">
+      <input type="text" placeholder="Username" class="form-input" name="username" required>
+      <input type="password" placeholder="Password" class="form-input" name="password" required>
+      <button type="submit" class="form-btn">LOGIN</button>
+    </form>
+  </div>
 </body>
 </html>
