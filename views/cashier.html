@@ -53,9 +53,64 @@
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
-        <h2>Profile Section</h2>
-        <p>Profile interface content goes here...</p>
-      </section>
+            <!-- Profile header with welcome message -->
+            <div class="profile-header">
+            <h2>Welcome, <span id="profile-username">cashier</span></h2> <!-- Username is shown here -->
+            </div>
+        
+            <!-- Horizontal container for profile picture, details, and edit button -->
+            <div class="profile-info">
+            <!-- 1) Profile picture -->
+            <div class="profile-picture">
+                <img src="/images/profile.png" alt="Profile Picture">
+            </div>
+            
+            <!-- 2) Profile details -->
+            <div class="profile-details">
+                <p>Name: <span id="profile-fullname">John Doe</span></p>
+                <p>Email: <span id="profile-email">john@example.com</span></p>
+                <p>Role: <span id="profile-role">cashier</span></p>
+            </div>
+            
+            <!-- 3) Edit button -->
+            <div class="profile-edit-btn">
+                <button onclick="toggleProfileEdit()">Edit</button>
+            </div>           
+            </div>
+        
+            <!-- Grid for editable fields (3 columns x 2 rows) -->
+            <div class="profile-grid">
+            <div class="profile-field">
+                <label for="edit-fullname">Full Name</label>
+                <input type="text" id="edit-fullname" value="John Doe" disabled>
+            </div>
+            <div class="profile-field">
+                <label for="edit-username">Username</label>
+                <input type="text" id="edit-username" value="cashier" disabled>
+            </div>
+            <div class="profile-field">
+                <label for="edit-gender">Gender</label>
+                <input type="text" id="edit-gender" value="Male" disabled>
+            </div>
+            <div class="profile-field">
+                <label for="edit-country">Country</label>
+                <input type="text" id="edit-country" value="USA" disabled>
+            </div>
+            <div class="profile-field">
+                <label for="edit-language">Language</label>
+                <input type="text" id="edit-language" value="English" disabled>
+            </div>
+            <div class="profile-field">
+                <label for="edit-email">Email</label>
+                <input type="text" id="edit-email" value="john@example.com" disabled>
+            </div>
+            </div>
+        
+            <!-- "Erase account" text at the bottom -->
+            <div class="erase-account">
+            <p>Erase account</p>
+            </div>
+      </section> 
     </main>
   </div>
 
@@ -66,7 +121,7 @@
         section.style.display = section.id === sectionId ? 'block' : 'none';
       });
     }
-
+  
     // Guest Selection Logic
     document.querySelectorAll('.guest-option').forEach(option => {
       option.addEventListener('click', function() {
@@ -75,11 +130,50 @@
         showSection('home'); // Switch to home after selecting a guest
       });
     });
-
+  
     // Ensure the cashier starts in the guest selection view
     document.addEventListener("DOMContentLoaded", () => {
       showSection('guest-selection');
     });
-  </script>
+  
+    // Toggle between edit and save mode for profile editing
+    function toggleProfileEdit() {
+      // Get all input fields and the button
+      const inputs = document.querySelectorAll('.profile-field input');
+      const editBtn = document.querySelector('.profile-edit-btn button');
+      
+      if (editBtn.textContent === "Edit") {
+        // Enable editing
+        inputs.forEach(input => {
+          input.disabled = false;
+        });
+        editBtn.textContent = "Save";
+      } else {
+        // Save the changes (client-side only)
+        let updatedProfile = {};
+        inputs.forEach(input => {
+          updatedProfile[input.id] = input.value;
+          input.disabled = true;  // Disable editing after saving
+        });
+        editBtn.textContent = "Edit";
+        
+        /* Optionally send the updated profile data to the server
+        fetch('/profile/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedProfile)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Profile updated:', data);
+          // You can also update any on-page elements, e.g.:
+          document.getElementById('profile-fullname').textContent = updatedProfile["edit-fullname"];
+          document.getElementById('profile-email').textContent = updatedProfile["edit-email"];
+          // etc.
+        })
+        .catch(error => console.error('Error:', error)); */
+      }
+    }
+  </script>  
 </body>
 </html>
