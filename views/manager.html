@@ -3,16 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manager Dashboard - Canteleen</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <title>Manager Interface - Canteleen</title>
+  <link rel="stylesheet" href="/css/managerstyle.css">
 </head>
 <body>
-  <header class="toolbar">
-    <div class="title">Canteleen - Manager</div>
-  </header>
-  <main class="main-content">
-    <h1>Welcome, Manager!</h1>
-    <!-- Additional cashier features can be added here -->
-  </main>
+  <div class="cashier-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <button onclick="showSection('menu')"><img src="/images/menuicon.png" alt="Menu" class="sidebar-icon"></button>
+        <button onclick="showSection('orders')"><img src="/images/ordersicon.png" alt="Orders" class="sidebar-icon"></button>
+      </div>
+      <div class="sidebar-bottom">
+        <hr>
+        <button onclick="showSection('profile')"><img src="/images/profileicon.png" alt="Profile" class="sidebar-icon"></button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="cashier-main">
+      <!-- Menu Section -->
+      <section id="menu" class="active-section">
+        <h2>Menu Section</h2>
+        <p>This is the placeholder for the menu interface.</p>
+      </section>
+
+      <!-- Orders Section -->
+      <section id="orders" class="hidden-section">
+        <h2>Orders Section</h2>
+        <p>This is the placeholder for the orders interface.</p>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profile" class="hidden-section">
+        <h2>Profile Section</h2>
+        <p>This is the placeholder for the profile interface.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Show the selected section and hide others
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(section => {
+        section.style.display = section.id === sectionId ? 'block' : 'none';
+      });
+    }
+
+    // Ensure the manager starts in the menu view
+    document.addEventListener("DOMContentLoaded", () => {
+      showSection('menu');
+    });
+  </script>
 </body>
 </html>
