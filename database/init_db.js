@@ -1,53 +1,55 @@
-// database/init_db.js
-
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const dbPath = path.join(__dirname, 'canteleen.db');
 const db = new sqlite3.Database(dbPath);
 
-// Drop tables (for dev reset — optional)
-db.serialize(() => {
-  db.run(`DROP TABLE IF EXISTS users`);
-  db.run(`DROP TABLE IF EXISTS meals`);
-  db.run(`DROP TABLE IF EXISTS orders`);
+// Drop old tables if needed (for clean slate during dev)
+// Uncomment if necessary
+/*
+db.run("DROP TABLE IF EXISTS users");
+db.run("DROP TABLE IF EXISTS meals");
+db.run("DROP TABLE IF EXISTS orders");
+*/
 
-  // Create User Profiles table
-  db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      full_name TEXT,
-      username TEXT UNIQUE,
-      gender TEXT,
-      country TEXT,
-      language TEXT,
-      email TEXT UNIQUE,
-      password TEXT
-    )
-  `);
+// Create User Profiles table
+db.run(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    full_name TEXT,
+    username TEXT UNIQUE,
+    gender TEXT,
+    country TEXT,
+    language TEXT,
+    email TEXT UNIQUE,
+    password TEXT,
+    role TEXT CHECK(role IN ('cashier', 'manager'))
+  )
+`);
 
-  // Create Meals table
-  db.run(`
-    CREATE TABLE IF NOT EXISTS meals (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      price REAL,
-      ingredients TEXT,  -- JSON Array
-      nutrients TEXT,    -- JSON Object { calories, fat, sugar }
-      allergens TEXT     -- JSON Object { gluten, dairy, eggs, peanuts, soy }
-    )
-  `);
+// Create Meals table
+db.run(`
+  CREATE TABLE IF NOT EXISTS meals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    meal_name TEXT,
+    meal_price REAL,
+    meal_type TEXT,
+    ingredients TEXT, -- JSON list
+    nutrients TEXT, -- JSON object: { Calories: 500, Fat: 20, Sugar: 10 }
+    allergens TEXT -- JSON object: { Gluten: true, Dairy: false, ... }
+  )
+`);
 
-  // Create Orders table
-  db.run(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      card_id INTEGER,
-      balance REAL,
-      items TEXT   -- JSON Array of Meal objects
-    )
-  `);
+// Create Orders table
+db.run(`
+  CREATE TABLE IF NOT EXISTS orders (
+    order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id INTEGER,
+    balance REAL,
+    items TEXT -- JSON array of meal objects
+  )
+`);
 
-  console.log('✅ All tables created successfully.');
-  db.close();
+db.close(() => {
+  console.log('Updated database initialized and closed.');
 });

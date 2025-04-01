@@ -35,10 +35,67 @@
       </section>
 
       <!-- Profile Section -->
+      <!-- Profile Section -->
       <section id="profile" class="hidden-section">
-        <h2>Profile Section</h2>
-        <p>This is the placeholder for the profile interface.</p>
+        <!-- Profile header with welcome message -->
+        <div class="profile-header">
+          <h2>Welcome, <span id="profile-username">manager</span></h2>
+        </div>
+
+        <!-- Horizontal container for profile picture, details, and edit button -->
+        <div class="profile-info">
+          <!-- 1) Profile picture -->
+          <div class="profile-picture">
+            <img src="/images/profile.png" alt="Profile Picture">
+          </div>
+
+          <!-- 2) Profile details -->
+          <div class="profile-details">
+            <p>Name: <span id="profile-fullname">Jane Smith</span></p>
+            <p>Email: <span id="profile-email">jane@example.com</span></p>
+            <p>Role: <span id="profile-role">manager</span></p>
+          </div>
+
+          <!-- 3) Edit button -->
+          <div class="profile-edit-btn">
+            <button onclick="toggleProfileEdit()">Edit</button>
+          </div>
+        </div>
+
+        <!-- Grid for editable fields (3 columns x 2 rows) -->
+        <div class="profile-grid">
+          <div class="profile-field">
+            <label for="edit-fullname">Full Name</label>
+            <input type="text" id="edit-fullname" value="Jane Smith" disabled>
+          </div>
+          <div class="profile-field">
+            <label for="edit-username">Username</label>
+            <input type="text" id="edit-username" value="manager" disabled>
+          </div>
+          <div class="profile-field">
+            <label for="edit-gender">Gender</label>
+            <input type="text" id="edit-gender" value="Female" disabled>
+          </div>
+          <div class="profile-field">
+            <label for="edit-country">Country</label>
+            <input type="text" id="edit-country" value="France" disabled>
+          </div>
+          <div class="profile-field">
+            <label for="edit-language">Language</label>
+            <input type="text" id="edit-language" value="French" disabled>
+          </div>
+          <div class="profile-field">
+            <label for="edit-email">Email</label>
+            <input type="text" id="edit-email" value="jane@example.com" disabled>
+          </div>
+        </div>
+
+        <!-- "Erase account" text at the bottom -->
+        <div class="erase-account">
+          <p>Erase account</p>
+        </div>
       </section>
+
     </main>
   </div>
 
@@ -54,6 +111,26 @@
     document.addEventListener("DOMContentLoaded", () => {
       showSection('menu');
     });
+
+    // Toggle between edit and save mode for profile editing
+    function toggleProfileEdit() {
+      const inputs = document.querySelectorAll('.profile-field input');
+      const editBtn = document.querySelector('.profile-edit-btn button');
+
+      if (editBtn.textContent === "Edit") {
+        inputs.forEach(input => input.disabled = false);
+        editBtn.textContent = "Save";
+      } else {
+        let updatedProfile = {};
+        inputs.forEach(input => {
+          updatedProfile[input.id] = input.value;
+          input.disabled = true;
+        });
+        editBtn.textContent = "Edit";
+
+      }
+    }
+
   </script>
 </body>
 </html>
