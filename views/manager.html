@@ -33,6 +33,7 @@
         <!-- Tabs for Filtering -->
         <div class="menu-tabs">
           <button class="menu-tab" onclick="filterMeals('All')">All</button>
+          <button class="menu-tab" onclick="filterMeals('Menu')">Menu</button>
           <button class="menu-tab" onclick="filterMeals('Meat')">Meat</button>
           <button class="menu-tab" onclick="filterMeals('Vegetarian')">Vegetarian</button>
           <button class="menu-tab" onclick="filterMeals('Fish')">Fish</button>
@@ -51,22 +52,78 @@
             const response = await fetch('/meals');
             const meals = await response.json();
             const grid = document.querySelector('.menu-grid');
-            grid.innerHTML = '';
+            grid.innerHTML = ''; // Clear current tiles
             meals.forEach(meal => {
               const tile = document.createElement('div');
               tile.className = 'meal-tile';
+
+              // Set data attributes for filtering later
               tile.setAttribute('data-meal-type', meal.meal_type);
-              tile.setAttribute('data-meal-id', meal.id);
+              tile.setAttribute('data-inmenu', meal.inMenu ? "true" : "false");
+
               
               const nameDiv = document.createElement('div');
               nameDiv.className = 'meal-name';
               nameDiv.textContent = meal.meal_name;
               tile.appendChild(nameDiv);
+
+              // Add icon based on meal_type
+              const icon = document.createElement('img');
+              icon.className = 'meal-type-icon';
+              switch (meal.meal_type.toLowerCase()) {
+                case 'vegetarian':
+                  icon.src = '/images/vegetarianicon.png';
+                  break;
+                case 'meat':
+                  icon.src = '/images/meaticon.png';
+                  break;
+                case 'fish':
+                  icon.src = '/images/fishicon.png';
+                  break;
+                case 'dessert':
+                  icon.src = '/images/desserticon.png';
+                  break;
+                default:
+                  icon.src = ''; // No icon if unknown type
+              }
+              if (icon.src) tile.appendChild(icon);
+
               
+              // Row for menu actions (Add/Remove Meal to/from Menu)
+              const menuActionsDiv = document.createElement('div');
+              menuActionsDiv.className = 'menu-actions';
+              
+              const addMenuBtn = document.createElement('button');
+              addMenuBtn.textContent = 'Add Meal to Menu';
+              addMenuBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}/menu/add`, { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                  loadMeals(); // Refresh meals after update
+                } else {
+                  alert("Error adding meal to menu");
+                }
+              };
+              menuActionsDiv.appendChild(addMenuBtn);
+              
+              const removeMenuBtn = document.createElement('button');
+              removeMenuBtn.textContent = 'Remove Meal from Menu';
+              removeMenuBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}/menu/remove`, { method: 'POST' });
+                if (res.ok) {
+                  loadMeals(); // Refresh meals after update
+                } else {
+                  alert("Error removing meal from menu");
+                }
+              };
+              menuActionsDiv.appendChild(removeMenuBtn);
+              
+              tile.appendChild(menuActionsDiv);
+        
+              // Row for Copy, Modify, Delete actions
               const actionsDiv = document.createElement('div');
               actionsDiv.className = 'meal-actions';
               
-              // Copy button
               const copyBtn = document.createElement('button');
               copyBtn.textContent = 'Copy';
               copyBtn.onclick = async () => {
@@ -76,7 +133,6 @@
               };
               actionsDiv.appendChild(copyBtn);
               
-              // Modify button
               const modifyBtn = document.createElement('button');
               modifyBtn.textContent = 'Modify';
               modifyBtn.onclick = () => {
@@ -84,7 +140,6 @@
               };
               actionsDiv.appendChild(modifyBtn);
               
-              // Delete button
               const deleteBtn = document.createElement('button');
               deleteBtn.textContent = 'X';
               deleteBtn.className = 'delete-btn';
@@ -102,16 +157,29 @@
             console.error(error);
           }
         }
+        
+        
 
         function filterMeals(category) {
           const tiles = document.querySelectorAll('.meal-tile');
           tiles.forEach(tile => {
-            if (category === 'All' || tile.getAttribute('data-meal-type') === category)
+            const inMenu = tile.getAttribute('data-inmenu');  // Fetch the inMenu value
+            const type = tile.getAttribute('data-meal-type');
+            
+            if (category === 'Menu') {
+              tile.style.display = inMenu === "true" ? 'block' : 'none';  // Only show if inMenu=true
+            } else if (category === 'All') {
               tile.style.display = 'block';
-            else
-              tile.style.display = 'none';
+            } else {
+              tile.style.display = type === category ? 'block' : 'none';
+            }
           });
         }
+        
+        
+        
+        
+        
 
         function setupSearchBar() {
           const searchInput = document.querySelector('.menu-search-input');

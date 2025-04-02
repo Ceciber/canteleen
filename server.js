@@ -96,14 +96,16 @@ app.get('/meals', (req, res) => {
       res.status(500).json({ error: err.message });
     } else {
       const meals = rows.map(row => ({
-         id: row.id,
-         meal_name: row.meal_name,
-         meal_price: row.meal_price,
-         meal_type: row.meal_type,
-         ingredients: JSON.parse(row.ingredients),
-         nutrients: JSON.parse(row.nutrients),
-         allergens: JSON.parse(row.allergens)
+        id: row.id,
+        meal_name: row.meal_name,
+        meal_price: row.meal_price,
+        meal_type: row.meal_type,
+        ingredients: JSON.parse(row.ingredients),
+        nutrients: JSON.parse(row.nutrients),
+        allergens: JSON.parse(row.allergens),
+        inMenu: row.inMenu === 1 // 👈 Convert 1/0 to true/false
       }));
+      
       res.json(meals);
     }
     db.close();
@@ -209,6 +211,88 @@ app.post('/meals/:id/copy', (req, res) => {
     }
   });
 });
+
+
+// GET all meals that are in the Menu
+app.get('/meals', (req, res) => {
+  const db = new sqlite3.Database(dbPath);
+  db.all("SELECT * FROM meals", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      const meals = rows.map(row => ({
+         id: row.id,
+         meal_name: row.meal_name,
+         meal_price: row.meal_price,
+         meal_type: row.meal_type,
+         ingredients: JSON.parse(row.ingredients),
+         nutrients: JSON.parse(row.nutrients),
+         allergens: JSON.parse(row.allergens),
+         inMenu: row.inMenu ? true : false
+      }));
+      res.json(meals);
+    }
+    db.close();
+  });
+});
+
+//Add a meal to the Menu
+app.post('/meals/:id/menu/add', (req, res) => {
+  const mealId = req.params.id;
+  const db = new sqlite3.Database(dbPath);
+  // Get the meal type first
+  db.get("SELECT meal_type FROM meals WHERE id = ?", [mealId], (err, row) => {
+    if (err || !row) {
+      db.close();
+      return res.status(500).json({ error: "Meal not found" });
+    }
+    const mealType = row.meal_type;
+    // Set inMenu = 0 for any meal of the same type that is already in the menu
+    db.run("UPDATE meals SET inMenu = 0 WHERE meal_type = ? AND inMenu = 1", [mealType], function(err) {
+      if (err) {
+        db.close();
+        return res.status(500).json({ error: "Failed to update existing meals" });
+      }
+      // Now update the selected meal
+      db.run("UPDATE meals SET inMenu = 1 WHERE id = ?", [mealId], function(err) {
+        if (err) {
+          db.close();
+          return res.status(500).json({ error: "Failed to add meal to menu" });
+        }
+      
+        // Log meals that are currently in the menu
+        db.all("SELECT id, meal_name, meal_type FROM meals WHERE inMenu = 1", [], (err, rows) => {
+          db.close();
+          if (err) {
+            console.error("Error fetching in-menu meals:", err);
+          } else {
+            console.log("📋 Meals currently in the menu:");
+            rows.forEach(meal => {
+              console.log(`- [${meal.id}] ${meal.meal_name} (${meal.meal_type})`);
+            });
+          }
+      
+          res.json({ message: "Meal added to menu" });
+        });
+      });      
+    });
+  });
+});
+
+
+// Remove a meal from the menu
+app.post('/meals/:id/menu/remove', (req, res) => {
+  const mealId = req.params.id;
+  const db = new sqlite3.Database(dbPath);
+  db.run("UPDATE meals SET inMenu = 0 WHERE id = ?", [mealId], function(err) {
+    db.close();
+    if (err) {
+      return res.status(500).json({ error: "Failed to remove meal from menu" });
+    }
+    res.json({ message: "Meal removed from menu" });
+  });
+});
+
 
 
 //Tracking the user session when the user logs in

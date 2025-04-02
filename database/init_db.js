@@ -4,6 +4,8 @@ const path = require('path');
 const dbPath = path.join(__dirname, 'canteleen.db');
 const db = new sqlite3.Database(dbPath);
 
+
+
 // Drop old tables if needed (for clean slate during dev)
 // Uncomment if necessary
 /*
@@ -36,7 +38,8 @@ db.run(`
     meal_type TEXT,
     ingredients TEXT, 
     nutrients TEXT, 
-    allergens TEXT 
+    allergens TEXT,
+    inMenu BOOLEAN DEFAULT 0
   )
 `);
 

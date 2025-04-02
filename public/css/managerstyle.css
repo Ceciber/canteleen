@@ -280,3 +280,30 @@ body {
     background-color: #ffe5e5;
   }
   
+  /* Styles for the new row of menu actions inside meal tiles */
+.menu-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.menu-actions button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #e5e7eb;
+}
+
+.menu-actions button:hover {
+  background-color: #d1d5db;
+}
+
+
+.meal-type-icon {
+  width: 40px;
+  height: 40px;
+  margin: 10px auto;
+  display: block;
+}
