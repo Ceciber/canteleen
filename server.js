@@ -434,6 +434,7 @@ app.post('/clients/recharge', (req, res) => {
   });
 });
 
+
 app.get('/orders', (req, res) => {
   const db = new sqlite3.Database(dbPath);
   db.all("SELECT * FROM orders", [], (err, rows) => {
@@ -442,6 +443,7 @@ app.get('/orders', (req, res) => {
     res.json(rows);
   });
 });
+
 
 app.post('/orders', express.json(), (req, res) => {
   const { card_id, payment_method, items } = req.body;

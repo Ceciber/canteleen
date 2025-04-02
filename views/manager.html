@@ -173,11 +173,146 @@
 
 
       <!-- Orders Section -->
-      <section id="orders" class="hidden-section">
-        <div class="orders-section">
-          <button onclick="fetchOrders()" class="fetch-orders-btn">Show All Orders</button>
+      <!-- Orders Section -->
+    <section id="orders" class="hidden-section">
+      <!-- Top Summary Row -->
+      <div class="orders-summary">
+        <div class="summary-item">
+          <label>Total Income</label>
+          <div id="total-income">€0.00</div>
         </div>
-      </section>
+        <div class="summary-item">
+          <label>Total Orders</label>
+          <div id="total-orders">0</div>
+        </div>
+        <div class="summary-item">
+          <label>Amount of Meat meals ordered</label>
+          <div id="meat-count">0</div>
+        </div>
+        <div class="summary-item">
+          <label>Amount of Fish meals ordered</label>
+          <div id="fish-count">0</div>
+        </div>
+        <div class="summary-item">
+          <label>Amount of Vegetarian meals ordered</label>
+          <div id="vegetarian-count">0</div>
+        </div>
+        <div class="summary-item">
+          <label>Amount of Desserts ordered</label>
+          <div id="dessert-count">0</div>
+        </div>
+      </div>
+
+      <!-- Lower Orders Area -->
+      <div class="orders-lower">
+        <!-- Sidebar B: Order Details -->
+        <aside class="order-details-sidebar" id="order-details-sidebar">
+          <h3>Order Details</h3>
+          <p>Selected Order ID: <span id="selected-order-id">None</span></p>
+          <!-- (Optional: Additional order details can be rendered here) -->
+        </aside>
+
+        <!-- Space A: Orders List -->
+        <div class="orders-list-container">
+          <div class="orders-list-header">
+            <div class="orders-col order-id-col">Order_ID</div>
+            <div class="orders-col items-col">Items</div>
+            <div class="orders-col amount-col">Amount</div>
+            <div class="orders-col card-col">Card_ID</div>
+            <div class="orders-col date-col">Date</div>
+          </div>
+          <div id="orders-list" class="orders-list">
+            <!-- Order rows will be injected here dynamically -->
+          </div>
+          <div class="orders-instructions">
+            <p>Select an order to see relevant details</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </section> <!-- end of orders section -->
+
+  <script>
+    async function loadOrders() {
+      try {
+        const response = await fetch('/orders');
+        const orders = await response.json();
+        const ordersList = document.getElementById('orders-list');
+        ordersList.innerHTML = '';
+  
+        // Variables for aggregated data
+        let totalIncome = 0;
+        let totalOrders = orders.length;
+        let meatCount = 0, fishCount = 0, vegetarianCount = 0, dessertCount = 0;
+  
+        orders.forEach(order => {
+          const items = JSON.parse(order.items);
+          let orderTotal = 0, orderItemCount = 0;
+  
+          items.forEach(item => {
+            const qty = item.quantity || 1;
+            const price = item.meal_price;
+            orderTotal += qty * price;
+            orderItemCount += qty;
+  
+            switch ((item.meal_type || '').toLowerCase()) {
+              case 'meat': meatCount += qty; break;
+              case 'fish': fishCount += qty; break;
+              case 'vegetarian': vegetarianCount += qty; break;
+              case 'dessert': dessertCount += qty; break;
+            }
+          });
+  
+          totalIncome += orderTotal;
+  
+          const row = document.createElement('div');
+          row.className = 'order-row';
+          row.onclick = () => {
+            document.getElementById('selected-order-id').textContent = order.order_id;
+          };
+  
+          const colOrderId = document.createElement('div');
+          colOrderId.textContent = order.order_id;
+  
+          const colItems = document.createElement('div');
+          colItems.textContent = orderItemCount;
+  
+          const colAmount = document.createElement('div');
+          colAmount.textContent = `€${orderTotal.toFixed(2)}`;
+  
+          const colCard = document.createElement('div');
+          colCard.textContent = order.card_id;
+  
+          const colDate = document.createElement('div');
+          colDate.textContent = order.date || 'N/A';
+  
+          row.append(colOrderId, colItems, colAmount, colCard, colDate);
+          ordersList.appendChild(row);
+        });
+  
+        // Update summary fields
+        document.getElementById('total-income').textContent = `€${totalIncome.toFixed(2)}`;
+        document.getElementById('total-orders').textContent = totalOrders;
+        document.getElementById('meat-count').textContent = meatCount;
+        document.getElementById('fish-count').textContent = fishCount;
+        document.getElementById('vegetarian-count').textContent = vegetarianCount;
+        document.getElementById('dessert-count').textContent = dessertCount;
+      } catch (err) {
+        console.error("Failed to load orders:", err);
+      }
+    }
+  
+    // Load and show orders when page is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Show the orders section right away
+      document.querySelectorAll('section').forEach(section => {
+        section.style.display = section.id === 'orders' ? 'block' : 'none';
+      });
+      loadOrders();
+    });
+  </script>
+  
       
 
       <!-- Profile Section -->
