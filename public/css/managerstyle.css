@@ -437,3 +437,35 @@ body {
   text-align: center;
   color: #555;
 }
+
+
+/* Sidebar Header & Tabs */
+.order-details-sidebar .sidebar-header {
+  margin-bottom: 10px;
+}
+
+.order-details-sidebar .sidebar-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.order-details-sidebar .sidebar-tab {
+  flex: 1;
+  padding: 8px;
+  background-color: #e5e7eb;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-details-sidebar .sidebar-tab.active {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.order-details-sidebar .sidebar-content {
+  overflow-y: auto;
+  max-height: calc(100% - 80px); /* Adjust if needed */
+}

@@ -205,13 +205,6 @@
 
       <!-- Lower Orders Area -->
       <div class="orders-lower">
-        <!-- Sidebar B: Order Details -->
-        <aside class="order-details-sidebar" id="order-details-sidebar">
-          <h3>Order Details</h3>
-          <p>Selected Order ID: <span id="selected-order-id">None</span></p>
-          <!-- (Optional: Additional order details can be rendered here) -->
-        </aside>
-
         <!-- Space A: Orders List -->
         <div class="orders-list-container">
           <div class="orders-list-header">
@@ -228,7 +221,24 @@
             <p>Select an order to see relevant details</p>
           </div>
         </div>
+
+        <!-- Sidebar B: Order Details -->
+        <aside class="order-details-sidebar" id="order-details-sidebar">
+          <div class="sidebar-header">
+            <h3>Order <span id="selected-order-id">None</span></h3>
+          </div>
+          <div class="sidebar-tabs">
+            <button class="sidebar-tab active" id="order-tab" onclick="setActiveTab('order'); showOrderDetails();">Order</button>
+            <button class="sidebar-tab" id="payment-tab" onclick="setActiveTab('payment'); showPaymentDetails();">Payment</button>
+          </div>
+          <div class="sidebar-content" id="sidebar-content">
+            <!-- Content will be injected dynamically -->
+          </div>
+        </aside>
+
       </div>
+
+  
     </section>
 
   </section> <!-- end of orders section -->
@@ -269,8 +279,9 @@
           const row = document.createElement('div');
           row.className = 'order-row';
           row.onclick = () => {
-            document.getElementById('selected-order-id').textContent = order.order_id;
+            setSelectedOrder(order);
           };
+          
   
           const colOrderId = document.createElement('div');
           colOrderId.textContent = order.order_id;
@@ -311,6 +322,95 @@
       });
       loadOrders();
     });
+
+      let selectedOrder = null;
+    
+      // Call this function when an order row is clicked
+      function setSelectedOrder(order) {
+        selectedOrder = order;
+        document.getElementById('selected-order-id').textContent = order.order_id;
+        // Default to showing order details
+        setActiveTab('order');
+        showOrderDetails();
+      }
+    
+      function setActiveTab(tabName) {
+        const orderTab = document.getElementById('order-tab');
+        const paymentTab = document.getElementById('payment-tab');
+        if (tabName === 'order') {
+          orderTab.classList.add('active');
+          paymentTab.classList.remove('active');
+        } else if (tabName === 'payment') {
+          paymentTab.classList.add('active');
+          orderTab.classList.remove('active');
+        }
+      }
+    
+      function showOrderDetails() {
+        const sidebarContent = document.getElementById('sidebar-content');
+        sidebarContent.innerHTML = '';
+        if (!selectedOrder) {
+          sidebarContent.innerHTML = '<p>No order selected.</p>';
+          return;
+        }
+        let items;
+        try {
+          items = JSON.parse(selectedOrder.items);
+        } catch(e) {
+          sidebarContent.innerHTML = '<p>Error reading order details.</p>';
+          return;
+        }
+        // Group items: main courses vs. dessert
+        let mainCourses = [];
+        let desserts = [];
+        items.forEach(item => {
+          const type = (item.meal_type || '').toLowerCase();
+          if (type === 'dessert') {
+            desserts.push(item);
+          } else {
+            mainCourses.push(item);
+          }
+        });
+        
+        if (mainCourses.length > 0) {
+          const mainHeader = document.createElement('h4');
+          mainHeader.textContent = 'Main Courses';
+          sidebarContent.appendChild(mainHeader);
+          mainCourses.forEach(item => {
+            const p = document.createElement('p');
+            p.textContent = `${item.meal_name} (x${item.quantity || 1}) - €${(item.meal_price * (item.quantity || 1)).toFixed(2)}`;
+            sidebarContent.appendChild(p);
+          });
+        }
+        
+        if (desserts.length > 0) {
+          const dessertHeader = document.createElement('h4');
+          dessertHeader.textContent = 'Dessert';
+          sidebarContent.appendChild(dessertHeader);
+          desserts.forEach(item => {
+            const p = document.createElement('p');
+            p.textContent = `${item.meal_name} (x${item.quantity || 1}) - €${(item.meal_price * (item.quantity || 1)).toFixed(2)}`;
+            sidebarContent.appendChild(p);
+          });
+        }
+      }
+    
+      function showPaymentDetails() {
+        const sidebarContent = document.getElementById('sidebar-content');
+        sidebarContent.innerHTML = '';
+        if (!selectedOrder) {
+          sidebarContent.innerHTML = '<p>No order selected.</p>';
+          return;
+        }
+        const title = document.createElement('h4');
+        title.textContent = 'Payment method';
+        sidebarContent.appendChild(title);
+    
+        const paymentInfo = document.createElement('p');
+        paymentInfo.textContent = selectedOrder.payment_method || 'Not Paid';
+        sidebarContent.appendChild(paymentInfo);
+      }
+    
   </script>
   
       
