@@ -174,9 +174,11 @@
 
       <!-- Orders Section -->
       <section id="orders" class="hidden-section">
-        <h2>Orders Section</h2>
-        <p>This is the placeholder for the orders interface.</p>
+        <div class="orders-section">
+          <button onclick="fetchOrders()" class="fetch-orders-btn">Show All Orders</button>
+        </div>
       </section>
+      
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
@@ -342,7 +344,16 @@
       window.location.href = '/logout';
     }
     
-
+      async function fetchOrders() {
+        try {
+          const res = await fetch('/orders');
+          const data = await res.json();
+          console.log("Orders from database:", data);
+        } catch (err) {
+          console.error("Error fetching orders:", err);
+        }
+      }
+    
   </script>
 </body>
 </html>

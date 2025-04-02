@@ -331,3 +331,19 @@ body {
 .menu-actions button:hover {
   background-color: #d1d5db;
 }
+
+.fetch-orders-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 2rem auto;
+  display: block;
+}
+
+.fetch-orders-btn:hover {
+  background-color: #2563eb;
+}

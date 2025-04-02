@@ -498,10 +498,10 @@
         balanceBox.classList.remove('disabled');
       }
     }
-  
     function selectMethod(method) {
-      alert("You selected " + method);
+      submitOrder(method);
     }
+    
   
     async function simulateBadgeScan() {
       const guest = sessionStorage.getItem('selectedGuest') || 'student';
@@ -565,6 +565,37 @@
         console.error("Recharge error", err);
       }
     }
+
+    async function submitOrder(paymentMethod) {
+      // Use card_id from sessionStorage (or default to 1111)
+      const card_id = sessionStorage.getItem('card_id') || 1111;
+    
+      try {
+        const res = await fetch('/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            card_id: card_id,
+            payment_method: paymentMethod,
+            items: order  // Global variable holding the order items
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert("Order saved successfully with payment method " + paymentMethod + ". Order ID: " + data.order_id);
+          // Reset the order information
+          order = [];
+          renderOrder();
+          // Redirect to the payment section (or a confirmation page if you implement one)
+          showSection('payment');
+        } else {
+          alert("Error saving order.");
+        }
+      } catch (e) {
+        console.error("Error submitting order:", e);
+      }
+    }
+    
 
   </script>  
 </body>

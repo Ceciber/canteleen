@@ -434,6 +434,32 @@ app.post('/clients/recharge', (req, res) => {
   });
 });
 
+app.get('/orders', (req, res) => {
+  const db = new sqlite3.Database(dbPath);
+  db.all("SELECT * FROM orders", [], (err, rows) => {
+    db.close();
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
+app.post('/orders', express.json(), (req, res) => {
+  const { card_id, payment_method, items } = req.body;
+  const db = new sqlite3.Database(dbPath);
+  db.run(
+    "INSERT INTO orders (card_id, payment_method, items) VALUES (?, ?, ?)",
+    [card_id, payment_method, JSON.stringify(items)],
+    function(err) {
+      db.close();
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ order_id: this.lastID });
+    }
+  );
+});
+
+
 
 // node server.js
 // http://localhost:3000

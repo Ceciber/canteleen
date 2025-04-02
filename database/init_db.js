@@ -43,14 +43,16 @@ db.serialize(() => {
     )
   `);
 
+  // Create Orders table
   db.run(`
     CREATE TABLE IF NOT EXISTS orders (
       order_id INTEGER PRIMARY KEY AUTOINCREMENT,
       card_id INTEGER,
-      balance REAL,
-      items TEXT
+      payment_method TEXT,
+      items TEXT -- JSON array of meal objects
     )
   `);
+
 
   db.run(`
     CREATE TABLE IF NOT EXISTS clients (
