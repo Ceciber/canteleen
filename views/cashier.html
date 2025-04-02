@@ -262,9 +262,43 @@
 
       <!-- Payment Section -->
       <section id="payment" class="hidden-section">
-        <h2>Payment Section</h2>
-        <p>Payment interface content goes here...</p>
-      </section>
+        <div class="payment-container-flex">
+          <!-- Left: Client Info -->
+          <div class="client-info">
+            <p><strong>Name:</strong> <span id="client-name">-</span></p>
+            <p><strong>Card Number:</strong> <span id="client-card">-</span></p>
+            <p><strong>Balance:</strong> €<span id="client-balance">-</span></p>
+          </div>
+      
+          <!-- Right: Recharge Box -->
+          <div class="recharge-side">
+            <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
+            <div id="recharge-box" class="recharge-box hidden">
+              <input type="number" placeholder="Amount to recharge..." id="recharge-amount">
+              <button onclick="saveRecharge()" class="save-recharge-btn">Save</button>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Payment Method Selection -->
+        <div class="payment-methods">
+          <p>Select a payment method:</p>
+          <div class="method-options">
+            <div class="method-box" onclick="selectMethod('cash')">
+              <img src="/images/cash.png" alt="Cash">
+              <p>Cash</p>
+            </div>
+            <div class="method-box" onclick="selectMethod('credit')">
+              <img src="/images/creditcard.png" alt="Credit Card">
+              <p>Credit Card</p>
+            </div>
+            <div class="method-box" id="balance-box" onclick="selectMethod('balance')">
+              <img src="/images/balance.png" alt="Balance">
+              <p>Balance</p>
+            </div>
+          </div>
+        </div>
+      </section>      
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
@@ -343,6 +377,10 @@
       if (sectionId === 'profile') {
         loadProfile(); // Load from DB when switching to profile
       }
+
+      if (sectionId === 'payment') {
+        simulateBadgeScan(); 
+      }
     }
     
   
@@ -352,6 +390,7 @@
         const discount = this.getAttribute('data-discount');
         sessionStorage.setItem('discount', discount);
         guestType = this.textContent.toLowerCase();
+        sessionStorage.setItem('selectedGuest', guestType);
         discountRate = parseFloat(discount);
         document.getElementById('guest-type-label').textContent = this.textContent;
         showSection('home');
@@ -444,6 +483,89 @@
       window.location.href = '/logout';
     }
     
+  </script>
+  
+  <script>
+    function toggleRecharge() {
+      const box = document.getElementById('recharge-box');
+      box.classList.toggle('hidden');
+  
+      // If recharge mode is active, disable balance method
+      const balanceBox = document.getElementById('balance-box');
+      if (!box.classList.contains('hidden')) {
+        balanceBox.classList.add('disabled');
+      } else {
+        balanceBox.classList.remove('disabled');
+      }
+    }
+  
+    function selectMethod(method) {
+      alert("You selected " + method);
+    }
+  
+    async function simulateBadgeScan() {
+      const guest = sessionStorage.getItem('selectedGuest') || 'student';
+      try {
+        const res = await fetch(`/clients/by-role?role=${guest}`);
+        const users = await res.json();
+        const random = users[Math.floor(Math.random() * users.length)];
+
+        console.log("Simulated user:", random);
+
+        document.getElementById('client-name').textContent = random.full_name;
+        document.getElementById('client-card').textContent = random.card_id;
+        document.getElementById('client-balance').textContent = random.balance.toFixed(2);
+
+        // store card ID for recharge later
+        sessionStorage.setItem('card_id', random.card_id);
+        sessionStorage.setItem('balance', random.balance);
+      } catch (err) {
+        console.error("Failed to simulate badge scan", err);
+      }
+    }
+
+    function toggleRecharge() {
+      const box = document.getElementById('recharge-box');
+      box.classList.toggle('hidden');
+
+      const balanceBox = document.getElementById('balance-box');
+      if (!box.classList.contains('hidden')) {
+        balanceBox.classList.add('disabled');
+      } else {
+        balanceBox.classList.remove('disabled');
+      }
+    }
+
+    async function saveRecharge() {
+      const amount = parseFloat(document.getElementById('recharge-amount').value);
+      const cardId = sessionStorage.getItem('card_id');
+
+      if (isNaN(amount) || amount <= 0) {
+        alert("Enter a valid amount");
+        return;
+      }
+
+      try {
+        const res = await fetch('/clients/recharge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ card_id: cardId, amount })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('client-balance').textContent = data.newBalance.toFixed(2);
+          document.getElementById('recharge-box').classList.add('hidden');
+          document.getElementById('recharge-amount').value = '';
+          document.getElementById('balance-box').classList.remove('disabled');
+        } else {
+          alert("Recharge failed");
+        }
+      } catch (err) {
+        console.error("Recharge error", err);
+      }
+    }
+
   </script>  
 </body>
 </html>

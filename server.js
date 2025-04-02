@@ -56,9 +56,6 @@ app.post('/signup', (req, res) => {
 });
 
 
-
-
-
 // Cashier dashboard page
 app.get('/cashier', (req, res) => {
   console.log("Serving cashier.html");
@@ -398,6 +395,42 @@ app.get('/logout', (req, res) => {
        return res.send("Error logging out");
     }
     res.redirect('/');
+  });
+});
+
+// endpoint for users used during the payment method
+app.get('/clients', (req, res) => {
+  const db = new sqlite3.Database(dbPath);
+  db.all("SELECT full_name, card_id, balance FROM users", [], (err, rows) => {
+    db.close();
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
+// Add route to return clients by role
+app.get('/clients/by-role', (req, res) => {
+  const role = req.query.role;
+  const db = new sqlite3.Database(dbPath);
+  db.all("SELECT full_name, card_id, balance FROM clients WHERE role = ?", [role], (err, rows) => {
+    db.close();
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
+// Add route to handle recharge:
+app.post('/clients/recharge', (req, res) => {
+  const { card_id, amount } = req.body;
+  const db = new sqlite3.Database(dbPath);
+  db.get("SELECT balance FROM clients WHERE card_id = ?", [card_id], (err, row) => {
+    if (err || !row) return res.status(404).json({ error: "Client not found" });
+    const newBalance = parseFloat(row.balance) + parseFloat(amount);
+    db.run("UPDATE clients SET balance = ? WHERE card_id = ?", [newBalance, card_id], function(err) {
+      db.close();
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ newBalance });
+    });
   });
 });
 
