@@ -245,7 +245,7 @@ body {
     margin-bottom: 30px;
   }
   
-  .account-actions .action-link {
+.account-actions .action-link {
     color: red;
     cursor: pointer;
     font-size: 0.9rem;
@@ -254,9 +254,237 @@ body {
     padding: 10px;
     border-radius: 4px;
     transition: background-color 0.2s ease-in-out;
+}
+  
+.account-actions .action-link:hover {
+    background-color: #ffe5e5;
+}
+
+/*Hompegae for placing the order*/
+.order-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    background-color: #f1f5f9;
+    border-left: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+  
+.order-sidebar h3,
+.order-sidebar h4 {
+    margin-top: 0;
+    color: #1e3a8a;
+}
+  
+.order-items {
+    margin: 15px 0;
+}
+  
+.order-item {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+  
+.order-item p {
+    margin: 4px 0;
+}
+  
+.quantity-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-top: 5px;
+}
+  
+.quantity-controls button {
+    padding: 4px 8px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+.quantity-controls button:hover {
+    background-color: #2563eb;
+}
+  
+.payment-summary p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+}
+  
+.pay-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+  
+.pay-btn:hover {
+    background-color: #2563eb;
+}
+
+/* Cashier Menu Section Styles */
+.menu-content {
+    display: flex;
+    gap: 20px;
+}
+  
+.menu-grid {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.menu-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
   }
   
-  .account-actions .action-link:hover {
-    background-color: #ffe5e5;
+  .menu-search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
+  
+  .menu-add-btn {
+    padding: 10px 20px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .menu-add-btn:hover {
+    background-color: #2563eb;
+  }
+  
+  .menu-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .menu-tab {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .menu-tab:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 0 20px;
+  }
+  
+  .meal-tile {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .meal-name {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .meal-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .meal-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .meal-actions button:hover {
+    background-color: #e5e7eb;
+  }
+
+  /*meal box in the homepage*/
+  .meal-tile {
+    width: 200px;
+    min-height: 250px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .meal-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .meal-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+  
+  .meal-price {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #1e3a8a;
+  }
+  
+  .meal-actions button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #1e3a8a;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .meal-actions button:hover {
+    background-color: #2563eb;
+  }
+  
+  
   

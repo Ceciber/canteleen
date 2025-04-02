@@ -222,9 +222,12 @@ body {
   }
   
   .meal-tile {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
+    width: 200px;
+    min-height: 250px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -232,25 +235,54 @@ body {
   }
   
   .meal-name {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .meal-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: 0 auto;
     margin-bottom: 10px;
+  }
+  
+  .meal-price {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #1e3a8a;
   }
   
   .meal-actions {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 5px;
   }
   
   .meal-actions button {
-    padding: 6px 12px;
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    background-color: #1e3a8a;
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s ease-in-out;
   }
   
   .meal-actions button:hover {
-    background-color: #e5e7eb;
+    background-color: #2563eb;
+  }
+  
+  .meal-actions .delete-btn {
+    background-color: #dc2626;
+  }
+  
+  .meal-actions .delete-btn:hover {
+    background-color: #b91c1c;
   }
   
   .delete-btn {
@@ -298,12 +330,4 @@ body {
 
 .menu-actions button:hover {
   background-color: #d1d5db;
-}
-
-
-.meal-type-icon {
-  width: 40px;
-  height: 40px;
-  margin: 10px auto;
-  display: block;
 }

@@ -56,74 +56,46 @@
             meals.forEach(meal => {
               const tile = document.createElement('div');
               tile.className = 'meal-tile';
-
-              // Set data attributes for filtering later
               tile.setAttribute('data-meal-type', meal.meal_type);
-              tile.setAttribute('data-inmenu', meal.inMenu ? "true" : "false");
+              tile.setAttribute('data-inmenu', meal.inMenu);
 
-              
+              // Meal name
               const nameDiv = document.createElement('div');
               nameDiv.className = 'meal-name';
               nameDiv.textContent = meal.meal_name;
               tile.appendChild(nameDiv);
 
-              // Add icon based on meal_type
-              const icon = document.createElement('img');
-              icon.className = 'meal-type-icon';
+              // Meal image
+              const image = document.createElement('img');
+              image.className = 'meal-image';
               switch (meal.meal_type.toLowerCase()) {
                 case 'vegetarian':
-                  icon.src = '/images/vegetarianicon.png';
+                  image.src = '/images/vegetarianicon.png';
                   break;
                 case 'meat':
-                  icon.src = '/images/meaticon.png';
+                  image.src = '/images/meaticon.png';
                   break;
                 case 'fish':
-                  icon.src = '/images/fishicon.png';
+                  image.src = '/images/fishicon.png';
                   break;
                 case 'dessert':
-                  icon.src = '/images/desserticon.png';
+                  image.src = '/images/desserticon.png';
                   break;
                 default:
-                  icon.src = ''; // No icon if unknown type
+                  image.src = '/images/defaultmeal.png';
               }
-              if (icon.src) tile.appendChild(icon);
+              tile.appendChild(image);
 
-              
-              // Row for menu actions (Add/Remove Meal to/from Menu)
-              const menuActionsDiv = document.createElement('div');
-              menuActionsDiv.className = 'menu-actions';
-              
-              const addMenuBtn = document.createElement('button');
-              addMenuBtn.textContent = 'Add Meal to Menu';
-              addMenuBtn.onclick = async () => {
-                const res = await fetch(`/meals/${meal.id}/menu/add`, { method: 'POST' });
-                const data = await res.json();
-                if (res.ok) {
-                  loadMeals(); // Refresh meals after update
-                } else {
-                  alert("Error adding meal to menu");
-                }
-              };
-              menuActionsDiv.appendChild(addMenuBtn);
-              
-              const removeMenuBtn = document.createElement('button');
-              removeMenuBtn.textContent = 'Remove Meal from Menu';
-              removeMenuBtn.onclick = async () => {
-                const res = await fetch(`/meals/${meal.id}/menu/remove`, { method: 'POST' });
-                if (res.ok) {
-                  loadMeals(); // Refresh meals after update
-                } else {
-                  alert("Error removing meal from menu");
-                }
-              };
-              menuActionsDiv.appendChild(removeMenuBtn);
-              
-              tile.appendChild(menuActionsDiv);
-        
-              // Row for Copy, Modify, Delete actions
+              // Price
+              const priceDiv = document.createElement('div');
+              priceDiv.className = 'meal-price';
+              priceDiv.textContent = `€${meal.meal_price.toFixed(2)}`;
+              tile.appendChild(priceDiv);
+
+              // Action buttons
               const actionsDiv = document.createElement('div');
               actionsDiv.className = 'meal-actions';
-              
+
               const copyBtn = document.createElement('button');
               copyBtn.textContent = 'Copy';
               copyBtn.onclick = async () => {
@@ -131,15 +103,13 @@
                 if (res.ok) loadMeals();
                 else alert("Error copying meal");
               };
-              actionsDiv.appendChild(copyBtn);
-              
+
               const modifyBtn = document.createElement('button');
               modifyBtn.textContent = 'Modify';
               modifyBtn.onclick = () => {
                 window.location.href = `/modifydish?id=${meal.id}`;
               };
-              actionsDiv.appendChild(modifyBtn);
-              
+
               const deleteBtn = document.createElement('button');
               deleteBtn.textContent = 'X';
               deleteBtn.className = 'delete-btn';
@@ -148,9 +118,10 @@
                 if (res.ok) loadMeals();
                 else alert("Error deleting meal");
               };
-              actionsDiv.appendChild(deleteBtn);
-              
+
+              actionsDiv.append(copyBtn, modifyBtn, deleteBtn);
               tile.appendChild(actionsDiv);
+
               grid.appendChild(tile);
             });
           } catch (error) {
