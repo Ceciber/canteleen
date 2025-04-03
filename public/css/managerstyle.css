@@ -259,6 +259,7 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 5px;
+    margin-top: 10px;
   }
   
   .meal-actions button {
@@ -331,6 +332,13 @@ body {
 .menu-actions button:hover {
   background-color: #d1d5db;
 }
+
+.menu-toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
 
 .fetch-orders-btn {
   padding: 12px 24px;

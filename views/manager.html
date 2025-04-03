@@ -92,7 +92,30 @@
               priceDiv.textContent = `€${meal.meal_price.toFixed(2)}`;
               tile.appendChild(priceDiv);
 
-              // Action buttons
+              // First row: Add/Remove to/from Menu
+              const menuActions = document.createElement('div');
+              menuActions.className = 'meal-actions';
+
+              const addToMenuBtn = document.createElement('button');
+              addToMenuBtn.textContent = 'Add to Menu';
+              addToMenuBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}/menu/add`, { method: 'POST' });
+                if (res.ok) loadMeals();
+                else alert("Error adding meal to menu");
+              };
+              
+              const removeFromMenuBtn = document.createElement('button');
+              removeFromMenuBtn.textContent = 'Remove from Menu';
+              removeFromMenuBtn.onclick = async () => {
+                const res = await fetch(`/meals/${meal.id}/menu/remove`, { method: 'POST' });
+                if (res.ok) loadMeals();
+                else alert("Error removing meal from menu");
+              };
+
+              menuActions.append(addToMenuBtn, removeFromMenuBtn);
+              tile.appendChild(menuActions);
+
+              // Second row: Copy, Modify, Delete
               const actionsDiv = document.createElement('div');
               actionsDiv.className = 'meal-actions';
 
@@ -121,6 +144,8 @@
 
               actionsDiv.append(copyBtn, modifyBtn, deleteBtn);
               tile.appendChild(actionsDiv);
+
+
 
               grid.appendChild(tile);
             });

@@ -262,13 +262,7 @@ app.post('/meals/:id/menu/add', (req, res) => {
           db.close();
           if (err) {
             console.error("Error fetching in-menu meals:", err);
-          } else {
-            console.log("📋 Meals currently in the menu:");
-            rows.forEach(meal => {
-              console.log(`- [${meal.id}] ${meal.meal_name} (${meal.meal_type})`);
-            });
-          }
-      
+          } 
           res.json({ message: "Meal added to menu" });
         });
       });      
