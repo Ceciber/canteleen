@@ -173,9 +173,6 @@
         }
         
         
-        
-        
-        
 
         function setupSearchBar() {
           const searchInput = document.querySelector('.menu-search-input');
@@ -226,6 +223,17 @@
           <label>Amount of Desserts ordered</label>
           <div id="dessert-count">0</div>
         </div>
+      </div>  
+      
+      <!-- Orders Header with Date Picker -->
+      <div class="orders-header-bar">
+        <div class="orders-header-left">
+          <h3 style="margin: 0;">Orders</h3>
+          <div class="date-picker-container">
+            <label for="order-date">Date:</label>
+            <input type="date" id="order-date">
+          </div>
+        </div>
       </div>
 
       <!-- Lower Orders Area -->
@@ -250,7 +258,11 @@
         <!-- Sidebar B: Order Details -->
         <aside class="order-details-sidebar" id="order-details-sidebar">
           <div class="sidebar-header">
-            <h3>Order <span id="selected-order-id">None</span></h3>
+            <h3>Order <span id="selected-order-id">None</span></h3>         
+            <p><strong>Name:</strong> <span id="selected-client-name">-</span></p>
+            <p><strong>Card Number:</strong> <span id="selected-card-id">-</span></p>
+            <p><strong>Cashier:</strong> <span id="selected-cashier">-</span></p>
+            <p><strong>Time:</strong> <span id="selected-time">-</span></p>
           </div>
           <div class="sidebar-tabs">
             <button class="sidebar-tab active" id="order-tab" onclick="setActiveTab('order'); showOrderDetails();">Order</button>
@@ -275,22 +287,38 @@
         const orders = await response.json();
         const ordersList = document.getElementById('orders-list');
         ordersList.innerHTML = '';
-  
+
+        const selectedDate = document.getElementById('order-date')?.value;
+        // Format as YYYY-MM-DD to compare
+        const selectedDateOnly = selectedDate ? new Date(selectedDate).toISOString().split('T')[0] : null;
+
         // Variables for aggregated data
         let totalIncome = 0;
-        let totalOrders = orders.length;
+        let totalOrders = 0;
         let meatCount = 0, fishCount = 0, vegetarianCount = 0, dessertCount = 0;
-  
+
         orders.forEach(order => {
-          const items = JSON.parse(order.items);
+          const orderDate = new Date(order.date).toISOString().split('T')[0];
+
+          // ✅ Filter based on selected date
+          if (selectedDateOnly && orderDate !== selectedDateOnly) return;
+
+          let items;
+          try {
+            items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+          } catch (err) {
+            console.warn("Skipping order with invalid item format", order);
+            return;
+          }
+
           let orderTotal = 0, orderItemCount = 0;
-  
+
           items.forEach(item => {
             const qty = item.quantity || 1;
             const price = item.meal_price;
             orderTotal += qty * price;
             orderItemCount += qty;
-  
+
             switch ((item.meal_type || '').toLowerCase()) {
               case 'meat': meatCount += qty; break;
               case 'fish': fishCount += qty; break;
@@ -298,35 +326,33 @@
               case 'dessert': dessertCount += qty; break;
             }
           });
-  
+
           totalIncome += orderTotal;
-  
+          totalOrders++;
+
           const row = document.createElement('div');
           row.className = 'order-row';
-          row.onclick = () => {
-            setSelectedOrder(order);
-          };
-          
-  
+          row.onclick = () => setSelectedOrder(order);
+
           const colOrderId = document.createElement('div');
           colOrderId.textContent = order.order_id;
-  
+
           const colItems = document.createElement('div');
           colItems.textContent = orderItemCount;
-  
+
           const colAmount = document.createElement('div');
           colAmount.textContent = `€${orderTotal.toFixed(2)}`;
-  
+
           const colCard = document.createElement('div');
           colCard.textContent = order.card_id;
-  
+
           const colDate = document.createElement('div');
-          colDate.textContent = order.date || 'N/A';
-  
+          colDate.textContent = orderDate;
+
           row.append(colOrderId, colItems, colAmount, colCard, colDate);
           ordersList.appendChild(row);
         });
-  
+
         // Update summary fields
         document.getElementById('total-income').textContent = `€${totalIncome.toFixed(2)}`;
         document.getElementById('total-orders').textContent = totalOrders;
@@ -334,6 +360,14 @@
         document.getElementById('fish-count').textContent = fishCount;
         document.getElementById('vegetarian-count').textContent = vegetarianCount;
         document.getElementById('dessert-count').textContent = dessertCount;
+
+        // ✅ Attach change event listener only once
+        const dateInput = document.getElementById('order-date');
+        if (dateInput && !dateInput.hasListener) {
+          dateInput.addEventListener('change', loadOrders);
+          dateInput.hasListener = true;
+        }
+
       } catch (err) {
         console.error("Failed to load orders:", err);
       }
@@ -341,10 +375,15 @@
   
     // Load and show orders when page is ready
     document.addEventListener('DOMContentLoaded', () => {
-      // Show the orders section right away
+      // Set today's date as default
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('order-date').value = today;
+
+      // Show the orders section directly
       document.querySelectorAll('section').forEach(section => {
         section.style.display = section.id === 'orders' ? 'block' : 'none';
       });
+
       loadOrders();
     });
 
@@ -353,8 +392,15 @@
       // Call this function when an order row is clicked
       function setSelectedOrder(order) {
         selectedOrder = order;
+
         document.getElementById('selected-order-id').textContent = order.order_id;
-        // Default to showing order details
+        document.getElementById('selected-client-name').textContent = order.client_name || '-';
+        document.getElementById('selected-card-id').textContent = order.card_id || '-';
+        document.getElementById('selected-cashier').textContent = order.cashier_username || '-';
+        document.getElementById('selected-time').textContent = order.date
+          ? new Date(order.date).toLocaleString()
+          : '-';
+
         setActiveTab('order');
         showOrderDetails();
       }

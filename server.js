@@ -439,20 +439,18 @@ app.get('/orders', (req, res) => {
 });
 
 
-app.post('/orders', express.json(), (req, res) => {
-  const { card_id, payment_method, items } = req.body;
+app.post('/orders', (req, res) => {
+  const { card_id, client_name, cashier_username, date, payment_method, items } = req.body;
   const db = new sqlite3.Database(dbPath);
-  db.run(
-    "INSERT INTO orders (card_id, payment_method, items) VALUES (?, ?, ?)",
-    [card_id, payment_method, JSON.stringify(items)],
-    function(err) {
-      db.close();
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ order_id: this.lastID });
-    }
-  );
+
+  db.run(`
+    INSERT INTO orders (card_id, client_name, cashier_username, date, payment_method, items)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `, [card_id, client_name, cashier_username, date, payment_method, items], function (err) {
+    db.close();
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Order saved', order_id: this.lastID });
+  });
 });
 
 

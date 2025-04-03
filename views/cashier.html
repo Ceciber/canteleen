@@ -566,26 +566,32 @@
     }
 
     async function submitOrder(paymentMethod) {
-      // Use card_id from sessionStorage (or default to 1111)
       const card_id = sessionStorage.getItem('card_id') || 1111;
-    
+      const client_name = document.getElementById('client-name').textContent;
+      const cashier_username = document.getElementById('profile-username').textContent || 'cashier';
+      const date = new Date().toISOString();
+
+      const orderData = {
+        card_id: sessionStorage.getItem('card_id'),
+        client_name: document.getElementById('client-name').textContent,
+        cashier_username: 'cashier', // Replace if dynamic
+        date: new Date().toISOString(),
+        payment_method: paymentMethod,
+        items: JSON.stringify(order) // ✅ Properly serialize
+      };
+
       try {
         const res = await fetch('/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            card_id: card_id,
-            payment_method: paymentMethod,
-            items: order  // Global variable holding the order items
-          })
+          body: JSON.stringify(orderData)
         });
+
         if (res.ok) {
           const data = await res.json();
           alert("Order saved successfully with payment method " + paymentMethod + ". Order ID: " + data.order_id);
-          // Reset the order information
           order = [];
           renderOrder();
-          // Redirect to the payment section (or a confirmation page if you implement one)
           showSection('payment');
         } else {
           alert("Error saving order.");
@@ -594,6 +600,7 @@
         console.error("Error submitting order:", e);
       }
     }
+
     
 
   </script>  

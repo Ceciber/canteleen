@@ -5,14 +5,13 @@ const dbPath = path.join(__dirname, 'canteleen.db');
 const db = new sqlite3.Database(dbPath);
 
 // Optional: Uncomment if you want to fully reset the DB
-/*
-db.serialize(() => {
+/*db.serialize(() => {
   db.run("DROP TABLE IF EXISTS users");
   db.run("DROP TABLE IF EXISTS meals");
-  db.run("DROP TABLE IF EXISTS orders");
+  db.run("DROP TABLE IF EXISTS orders"); 
   db.run("DROP TABLE IF EXISTS clients");
-});
-*/
+});*/
+
 
 db.serialize(() => {
   // Create tables in order
@@ -48,10 +47,13 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS orders (
       order_id INTEGER PRIMARY KEY AUTOINCREMENT,
       card_id INTEGER,
+      client_name TEXT,
+      cashier_username TEXT,
+      date TEXT,
       payment_method TEXT,
-      items TEXT -- JSON array of meal objects
+      items TEXT
     )
-  `);
+  `);  
 
 
   db.run(`
