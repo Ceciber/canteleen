@@ -72,11 +72,11 @@ db.serialize(() => {
                 ('Alice Student', 'student', 1111, 15.00),
                 ('Bob Teacher', 'teacher', 2222, 40.00),
                 ('Carol Staff', 'staff', 3333, 25.00),
-                ('David Visitor', 'other', 4444, 10.00)`, (insertErr) => {
+                ('David Visitor', 'other', NULL, NULL)`, (insertErr) => {
         if (insertErr) {
           console.error("Error inserting into clients table:", insertErr);
         } else {
-          console.log('✅ Database initialized successfully with sample clients.');
+          console.log('Database initialized successfully with sample clients.');
         }
         db.close();
       });

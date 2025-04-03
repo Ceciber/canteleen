@@ -262,15 +262,14 @@
 
       <!-- Payment Section -->
       <section id="payment" class="hidden-section">
-        <div class="payment-container-flex">
-          <!-- Left: Client Info -->
+        <div class="client-recharge-container">
+          <!-- Client Info (centered) -->
           <div class="client-info">
             <p><strong>Name:</strong> <span id="client-name">-</span></p>
             <p><strong>Card Number:</strong> <span id="client-card">-</span></p>
             <p><strong>Balance:</strong> €<span id="client-balance">-</span></p>
           </div>
-      
-          <!-- Right: Recharge Box -->
+          <!-- Recharge Side (button always visible, hidden input/save revealed on click) -->
           <div class="recharge-side">
             <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
             <div id="recharge-box" class="recharge-box hidden">
@@ -279,7 +278,7 @@
             </div>
           </div>
         </div>
-      
+        
         <!-- Payment Method Selection -->
         <div class="payment-methods">
           <p>Select a payment method:</p>
@@ -298,7 +297,7 @@
             </div>
           </div>
         </div>
-      </section>      
+      </section>    
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
