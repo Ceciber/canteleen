@@ -15,6 +15,7 @@ app.use(session({
 // Enable JSON parsing for request bodies
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.static('views'));
 
 const sqlite3 = require('sqlite3').verbose();
 const dbPath = path.join(__dirname, 'database', 'canteleen.db');
@@ -28,6 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Route for homepage
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.get('/index', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index_bis.html'));
 });
 
 // Route for login page (GET)
@@ -98,7 +103,7 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/map', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'map.xml'));
+  res.sendFile(path.join(__dirname, 'views', 'map.html'));
 });
 
 

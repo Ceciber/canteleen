@@ -79,7 +79,7 @@ strong {
 .nutrients-table td {
     padding: 8px;
     text-align: center;  /* Centrer le texte à l'intérieur des cellules */
-    width: 33.33%;  /* Force chaque colonne à avoir un tiers de la largeur */
+    width: 33.33%;  
 }
 
 .nutrients-row {
