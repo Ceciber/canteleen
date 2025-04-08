@@ -71,9 +71,9 @@ db.serialize(() => {
       // Now insert test data AFTER the table is confirmed created
       db.run(`INSERT INTO clients (full_name, role, card_id, balance)
               VALUES 
-                ('Alice Student', 'student', 1111, 15.00),
-                ('Bob Teacher', 'teacher', 2222, 40.00),
-                ('Carol Staff', 'staff', 3333, 25.00),
+                ('Alice Student', 'student', 1111 2222, 15.00),
+                ('Bob Teacher', 'teacher', 2222 3455, 40.00),
+                ('Carol Staff', 'staff', 3333 4556, 25.00),
                 ('David Visitor', 'other', NULL, NULL)`, (insertErr) => {
         if (insertErr) {
           console.error("Error inserting into clients table:", insertErr);

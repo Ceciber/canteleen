@@ -99,6 +99,9 @@
             <button class="category-tab" onclick="filterMeals('All')">
               <img src="/images/all.png" alt="All"><span>All</span>
             </button>
+            <button class="category-tab" onclick="filterMeals('Starter')">
+              <img src="/images/starters.png" alt="Starter"><span>Starter</span>
+            </button>
             <button class="category-tab" onclick="filterMeals('Meat')">
               <img src="/images/hamburger.png" alt="Meat"><span>Meat</span>
             </button>
@@ -106,10 +109,10 @@
               <img src="/images/seafood.png" alt="Fish"><span>Fish</span>
             </button>
             <button class="category-tab" onclick="filterMeals('Vegeterian')">
-              <img src="/images/Vegeterian.png" alt="Vegeterian"><span>Vegeterian</span>
+              <img src="/images/vegeterian.png" alt="Vegeterian"><span>Vegeterian</span>
             </button>
             <button class="category-tab" onclick="filterMeals('Dessert')">
-              <img src="/images/dessert.png" alt="Dessert"><span>Desserts</span>
+              <img src="/images/dessert.png" alt="Dessert"><span>Dessert</span>
             </button>
           </div>
         </div>
@@ -152,15 +155,16 @@
             meals.forEach(meal => {
               const tile = document.createElement('div');
               tile.className = 'meal-tile';
-              tile.setAttribute('data-meal-type', meal.meal_type);
+              tile.setAttribute('data-meal-type', meal.meal_type.toLowerCase());
               tile.setAttribute('data-meal-id', meal.id);
 
               const image = document.createElement('img');
               image.className = 'meal-image';
               switch (meal.meal_type.toLowerCase()) {
-                case 'vegetarian': image.src = '/images/vegetarianicon.png'; break;
+                case 'starter' : image.src = '/images/menu-starters.jpg'; break;
                 case 'meat': image.src = '/images/menu-meat.jpg'; break;
-                case 'fish': image.src = '/images/fishicon.png'; break;
+                case 'vegetarian': image.src = '/images/menu-vegeterian.jpg'; break;
+                case 'fish': image.src = '/images/menu-fish.jpg'; break;
                 case 'dessert': image.src = '/images/menu-dessert.jpg'; break;
                 default: image.src = '/images/defaultmeal.png';
               }
@@ -226,10 +230,12 @@
         function filterMeals(category) {
           const tiles = document.querySelectorAll('.meal-tile');
           tiles.forEach(tile => {
-            if (category === 'All' || tile.getAttribute('data-meal-type') === category)
+            const type = tile.getAttribute('data-meal-type');
+            if (category.toLowerCase() === 'all' || type === category.toLowerCase()) {
               tile.style.display = 'block';
-            else
+            } else {
               tile.style.display = 'none';
+            }
           });
         }
 
@@ -336,6 +342,7 @@
 
         function goToPayment() {
           showSection('payment');
+          simulateBadgeScan();
         }
       </script>
 
@@ -343,21 +350,21 @@
       <section id="payment" class="hidden-section">
         <div class="payment-wrapper">
           <div class="client-recharge-container">
-            <!-- Client Info -->
             <div class="client-info">
               <p><strong>Name:</strong> <span id="client-name">-</span></p>
               <p><strong>Card Number:</strong> <span id="client-card">-</span></p>
               <p><strong>Balance:</strong> €<span id="client-balance">-</span></p>
-            </div>
-            <!-- Recharge Side -->
-            <div class="recharge-side">
-              <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
-              <div id="recharge-box" class="recharge-box hidden">
-                <input type="number" placeholder="Amount to recharge..." id="recharge-amount">
-                <button onclick="saveRecharge()" class="save-recharge-btn">Save</button>
+          
+              <!-- ⬇️ Move recharge button and input here -->
+              <div class="recharge-side">
+                <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
+                <div id="recharge-box" class="recharge-box hidden">
+                  <input type="number" placeholder="Insert amount" id="recharge-amount">
+                  <button onclick="saveRecharge()" class="save-recharge-btn">Save</button>
+                </div>
               </div>
             </div>
-          </div>
+          </div>          
       
           <!-- Payment Method Selection -->
           <div class="payment-methods">
@@ -382,6 +389,8 @@
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
+        <div class="profile-inner">
+          <div class="profile-wrapper">
             <!-- Profile header with welcome message -->
             <div class="profile-header">
             <h2>Welcome, <span id="profile-username">cashier</span></h2> <!-- Username is shown here -->
@@ -434,14 +443,14 @@
                 <input type="text" id="edit-email" value="john@example.com" disabled>
             </div>
             </div>
+          </div>
+        </div>
         
             <!-- Erase Account and Log out Section -->
-            <div class="account-actions">
+        <div class="account-actions">
               <p class="action-link" onclick="eraseAccount()">Erase account</p>
               <p class="action-link" onclick="logout()">Log out</p>
-            </div>
-            
-
+        </div>
             
       </section> 
     </main>
@@ -469,7 +478,7 @@
       option.addEventListener('click', function () {
         const discount = this.getAttribute('data-discount');
         sessionStorage.setItem('discount', discount);
-        guestType = this.textContent.toLowerCase();
+        guestType = this.textContent.trim().toLowerCase();
         sessionStorage.setItem('selectedGuest', guestType);
         discountRate = parseFloat(discount);
         document.getElementById('guest-type-label').textContent = this.textContent;
@@ -597,25 +606,40 @@
     
   
     async function simulateBadgeScan() {
-      const guest = sessionStorage.getItem('selectedGuest') || 'student';
+      const guest = sessionStorage.getItem('selectedGuest') || 'Student'; // ✅ Don't lowercase
+
       try {
         const res = await fetch(`/clients/by-role?role=${guest}`);
+        
+        if (!res.ok) {
+          throw new Error("Request failed");
+        }
+
         const users = await res.json();
+
+        if (!users.length) {
+          console.error("No users found for role:", guest);
+          return;
+        }
+
         const random = users[Math.floor(Math.random() * users.length)];
 
         console.log("Simulated user:", random);
 
-        document.getElementById('client-name').textContent = random.full_name;
-        document.getElementById('client-card').textContent = random.card_id;
-        document.getElementById('client-balance').textContent = random.balance.toFixed(2);
+        // ✅ Check all fields before using
+        document.getElementById('client-name').textContent = random.full_name || '-';
+        document.getElementById('client-card').textContent = random.card_id || '-';
+        document.getElementById('client-balance').textContent = random.balance?.toFixed(2) ?? '0.00';
 
-        // store card ID for recharge later
+        // ✅ Store for use in recharge/payment
         sessionStorage.setItem('card_id', random.card_id);
         sessionStorage.setItem('balance', random.balance);
+        
       } catch (err) {
         console.error("Failed to simulate badge scan", err);
       }
     }
+
 
     function toggleRecharge() {
       const box = document.getElementById('recharge-box');
