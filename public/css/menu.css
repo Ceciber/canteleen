@@ -1,0 +1,112 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #0e3c47;
+    color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .menu-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(14, 60, 71, 0.95);
+    border: 2px solid #3aa7a1;
+    border-radius: 12px;
+  }
+  
+  .meal-section {
+    margin-bottom: 50px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #3aa7a1;
+  }
+  
+  .meal-type {
+    background-color: #3aa7a1;
+    color: #ffffff;
+    padding: 8px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    width: fit-content;
+    margin-bottom: 25px;
+    border-radius: 4px;
+  }
+  
+  .meal-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+  }
+  
+  .meal-info {
+    flex: 1;
+    padding-right: 15px;
+  }
+  
+  .name-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+
+  .name-allergens-row {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* ou 0.5rem, ou ce que tu veux */
+  }
+  
+  .meal-name {
+    text-align: left;
+    max-width: 70%;
+  }
+  
+  .meal-price {
+    text-align: right;
+    white-space: nowrap;
+    color: #3aa7a1;
+  }
+  
+  .meal-allergens {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 2px;
+  }
+  
+  .meal-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-left: 20px;
+    filter: brightness(0.9);
+  }
+  
+  @media (max-width: 600px) {
+    .meal-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .meal-img {
+      margin-top: 10px;
+      margin-left: 0;
+    }
+  
+    .name-price-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .meal-price {
+      align-self: flex-end;
+    }
+  }
