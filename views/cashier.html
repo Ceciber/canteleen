@@ -11,13 +11,25 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-top">
-        <button onclick="showSection('guest-selection')"><img src="/images/guesticon.png" alt="Guest" class="sidebar-icon"></button>
-        <button onclick="showSection('home')"><img src="/images/homeicon.png" alt="Home" class="sidebar-icon"></button>
-        <button onclick="showSection('payment')"><img src="/images/payicon.png" alt="Pay" class="sidebar-icon"></button>
+        <button id="btn-guest" onclick="showSection('guest-selection')">
+          <img src="/images/guesticon.png" alt="Guest" class="sidebar-icon">
+          <span>Guests</span>
+        </button>
+        <button id="btn-home" onclick="showSection('home')">
+          <img src="/images/homeicon.png" alt="Home" class="sidebar-icon">
+          <span>Menu</span>
+        </button>
+        <button id="btn-payment" onclick="showSection('payment')">
+          <img src="/images/payicon.png" alt="Pay" class="sidebar-icon">
+          <span>Payment</span>
+        </button>
       </div>
       <div class="sidebar-bottom">
         <hr>
-        <button onclick="showSection('profile')"><img src="/images/profileicon.png" alt="Profile" class="sidebar-icon"></button>
+        <button id="btn-profile" onclick="showSection('profile')">
+          <img src="/images/profileicon.png" alt="Profile" class="sidebar-icon">
+          <span>Profile</span>
+        </button>
       </div>
     </aside>
 
@@ -25,19 +37,50 @@
     <main class="cashier-main">
       <!-- Guest Selection (Initial View) -->
       <section id="guest-selection" class="active-section">
-        <div class="search-bar">
-          <input type="text" placeholder="Search guests..." class="search-input">
-          <button class="search-btn">
-            <img src="/images/searchicon.png" alt="Search" class="search-icon">
-          </button>
+        <div class="guest-selection-wrapper">
+          <div class="search-bar guest-search-bar">
+            <input type="text" id="guest-search" placeholder="Search..." class="search-input">
+            <button class="search-btn" onclick="filterGuestOptions()">
+              <img src="/images/searchicon.png" alt="Search" class="search-icon">
+            </button>
+          </div>
+          <h2 class="guest-selection-title">Select guest type</h2>
+          <div class="guest-options-grid">
+            <div class="guest-option" data-discount="0.15">
+              <img src="/images/guest-student.png" alt="Student" class="guest-icon">
+              <span>Student</span>
+            </div>
+            <div class="guest-option" data-discount="0.10">
+              <img src="/images/guest-teacher.png" alt="Teacher" class="guest-icon">
+              <span>Teacher</span>
+            </div>
+            <div class="guest-option" data-discount="0.05">
+              <img src="/images/guest-staff.png" alt="Staff" class="guest-icon">
+              <span>Staff</span>
+            </div>
+            <div class="guest-option" data-discount="0.00">
+              <img src="/images/guest-other.png" alt="Other" class="guest-icon">
+              <span>Other</span>
+            </div>
+          </div>
         </div>
-        <div class="guest-options-grid">
-          <div class="guest-option" data-discount="0.15">Student</div>
-          <div class="guest-option" data-discount="0.10">Teacher</div>
-          <div class="guest-option" data-discount="0.05">Staff</div>
-          <div class="guest-option" data-discount="0.00">Other</div>
-        </div>
-      </section>
+      </section>  
+      
+      <script>
+        function filterGuestOptions() {
+          const query = document.getElementById('guest-search').value.toLowerCase();
+          const boxes = document.querySelectorAll('.guest-option');
+
+          boxes.forEach(box => {
+            const text = box.textContent.toLowerCase();
+            if (text.includes(query)) {
+              box.style.display = 'flex';
+            } else {
+              box.style.display = 'none';
+            }
+          });
+        }
+      </script>
 
       <!-- Home Section -->
       <section id="home" class="hidden-section">
@@ -50,38 +93,51 @@
         </div>
         
         <!-- Tabs for Filtering -->
-        <div class="menu-tabs">
-          <button class="menu-tab" onclick="filterMeals('All')">All</button>
-          <button class="menu-tab" onclick="filterMeals('Meat')">Meat</button>
-          <button class="menu-tab" onclick="filterMeals('Vegetarian')">Vegetarian</button>
-          <button class="menu-tab" onclick="filterMeals('Fish')">Fish</button>
-          <button class="menu-tab" onclick="filterMeals('Dessert')">Dessert</button>
-          <button class="menu-tab" onclick="filterMeals('Customized Dessert')">Customized Dessert</button>
+        <div class="category-section">
+          <h3 class="category-title">Choose Category</h3>
+          <div class="category-tabs">
+            <button class="category-tab" onclick="filterMeals('All')">
+              <img src="/images/all.png" alt="All"><span>All</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Meat')">
+              <img src="/images/hamburger.png" alt="Meat"><span>Meat</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Fish')">
+              <img src="/images/seafood.png" alt="Fish"><span>Fish</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Vegeterian')">
+              <img src="/images/Vegeterian.png" alt="Vegeterian"><span>Vegeterian</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Dessert')">
+              <img src="/images/dessert.png" alt="Dessert"><span>Desserts</span>
+            </button>
+          </div>
         </div>
         
         <!-- Grid of Meal Tiles -->
+        <h3 class="menu-section-title">Select Dish</h3>
         <div class="menu-content">
           <div class="menu-grid">
             <!-- Tiles will be loaded dynamically -->
           </div>
-            <!-- Right Sidebar -->
-            <aside class="order-sidebar" id="order-sidebar">
-              <h3>Guest Type: <span id="guest-type-label">-</span></h3>
-              <h4>Order Summary (<span id="order-count">0</span> items)</h4>
-              
-              <!-- List of ordered items -->
-              <div id="order-items" class="order-items"></div>
 
-              <!-- Payment Summary -->
-              <div class="payment-summary">
-                <p>Total: €<span id="total-amount">0.00</span></p>
-                <p>Taxes (10%): €<span id="tax-amount">0.00</span></p>
-                <p>Discount: -€<span id="discount-amount">0.00</span></p>
-                <hr>
-                <p><strong>Amount Due: €<span id="final-amount">0.00</span></strong></p>
-                <button onclick="goToPayment()" class="pay-btn">Proceed to Payment</button>
-              </div>
-            </aside>
+          <!-- Right Sidebar -->
+          <aside class="order-sidebar" id="order-sidebar">
+            <h3>Guest Type: <span id="guest-type-label">-</span></h3>
+            <h4>Order Summary (<span id="order-count">0</span> items)</h4>
+          
+            <!-- List of ordered items -->
+            <div id="order-items" class="order-items"></div>
+          
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+              <div class="summary-row"><span>Subtotal</span><span id="total-amount">€0.00</span></div>
+              <div class="summary-row"><span>Tax 10%</span><span id="tax-amount">€0.00</span></div>
+              <div class="summary-row"><span>Discount</span><span id="discount-amount">-€0.00</span></div>
+              <div class="summary-row total"><span>Total</span><span id="final-amount">€0.00</span></div>
+              <button onclick="goToPayment()" class="pay-btn">Proceed to Payment</button>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -92,62 +148,79 @@
             const meals = await response.json();
             const grid = document.querySelector('.menu-grid');
             grid.innerHTML = '';
+
             meals.forEach(meal => {
               const tile = document.createElement('div');
               tile.className = 'meal-tile';
               tile.setAttribute('data-meal-type', meal.meal_type);
               tile.setAttribute('data-meal-id', meal.id);
 
-              // Meal Name
+              const image = document.createElement('img');
+              image.className = 'meal-image';
+              switch (meal.meal_type.toLowerCase()) {
+                case 'vegetarian': image.src = '/images/vegetarianicon.png'; break;
+                case 'meat': image.src = '/images/menu-meat.jpg'; break;
+                case 'fish': image.src = '/images/fishicon.png'; break;
+                case 'dessert': image.src = '/images/menu-dessert.jpg'; break;
+                default: image.src = '/images/defaultmeal.png';
+              }
+              meal.image = image.src;
+              tile.appendChild(image);
+
               const nameDiv = document.createElement('div');
               nameDiv.className = 'meal-name';
               nameDiv.textContent = meal.meal_name;
               tile.appendChild(nameDiv);
 
-              // Meal Image based on meal_type
-              const image = document.createElement('img');
-              image.className = 'meal-image';
-              switch (meal.meal_type.toLowerCase()) {
-                case 'vegetarian':
-                  image.src = '/images/vegetarianicon.png';
-                  break;
-                case 'meat':
-                  image.src = '/images/meaticon.png';
-                  break;
-                case 'fish':
-                  image.src = '/images/fishicon.png';
-                  break;
-                case 'dessert':
-                  image.src = '/images/desserticon.png';
-                  break;
-                default:
-                  image.src = '/images/defaultmeal.png'; // fallback image if needed
-              }
-              tile.appendChild(image);
-
-              // Price
               const priceDiv = document.createElement('div');
               priceDiv.className = 'meal-price';
               priceDiv.textContent = `€${meal.meal_price.toFixed(2)}`;
               tile.appendChild(priceDiv);
 
-              // Add button
               const actionsDiv = document.createElement('div');
               actionsDiv.className = 'meal-actions';
 
-              const addBtn = document.createElement('button');
-              addBtn.textContent = 'Add';
-              addBtn.onclick = () => {
-                addToOrder(meal);
-              };
-              actionsDiv.appendChild(addBtn);
+              const decBtn = document.createElement('button');
+              decBtn.textContent = '−';
+              const incBtn = document.createElement('button');
+              incBtn.textContent = '+';
+              const qtyLabel = document.createElement('span');
+              qtyLabel.className = 'meal-qty-label';
+              qtyLabel.textContent = 'Add';
 
+              let quantity = 0;
+              decBtn.onclick = () => {
+                if (quantity > 0) quantity--;
+                qtyLabel.textContent = quantity > 0 ? `${quantity} in Add` : 'Add';
+                updateOrder(meal, quantity);
+              };
+              incBtn.onclick = () => {
+                quantity++;
+                qtyLabel.textContent = `${quantity} in Add`;
+                updateOrder(meal, quantity);
+              };
+
+              actionsDiv.append(decBtn, qtyLabel, incBtn);
               tile.appendChild(actionsDiv);
               grid.appendChild(tile);
             });
           } catch (error) {
             console.error(error);
           }
+        }
+
+        function updateOrder(meal, quantity) {
+          const index = order.findIndex(o => o.id === meal.id);
+          if (quantity === 0) {
+            if (index !== -1) order.splice(index, 1);
+          } else {
+            if (index !== -1) {
+              order[index].quantity = quantity;
+            } else {
+              order.push({ ...meal, quantity });
+            }
+          }
+          renderOrder();
         }
 
         function filterMeals(category) {
@@ -204,39 +277,46 @@
             const itemDiv = document.createElement('div');
             itemDiv.className = 'order-item';
 
-            const name = document.createElement('p');
-            name.textContent = `${item.meal_name} - €${item.meal_price.toFixed(2)}`;
-            itemDiv.appendChild(name);
+            const img = document.createElement('img');
+            img.src = item.image || '/images/defaultmeal.png';
+            itemDiv.appendChild(img);
 
-            const controls = document.createElement('div');
-            controls.className = 'quantity-controls';
+            const details = document.createElement('div');
+            details.className = 'order-details';
 
+            const row1 = document.createElement('div');
+            row1.className = 'order-name-row';
+            row1.innerHTML = `<span>${item.meal_name}</span><span>€${item.meal_price.toFixed(2)}</span>`;
+
+            const row2 = document.createElement('div');
+            row2.className = 'order-controls';
             const decBtn = document.createElement('button');
             decBtn.textContent = '−';
             decBtn.onclick = () => {
               item.quantity = Math.max(1, item.quantity - 1);
               renderOrder();
             };
-
             const qty = document.createElement('span');
             qty.textContent = item.quantity;
-
             const incBtn = document.createElement('button');
             incBtn.textContent = '+';
             incBtn.onclick = () => {
               item.quantity += 1;
               renderOrder();
             };
+            row2.append(decBtn, qty, incBtn);
 
             const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'X';
+            removeBtn.textContent = '×';
+            removeBtn.className = 'remove-item-btn';
             removeBtn.onclick = () => {
               order = order.filter(o => o.id !== item.id);
               renderOrder();
             };
 
-            controls.append(decBtn, qty, incBtn, removeBtn);
-            itemDiv.appendChild(controls);
+            details.appendChild(row1);
+            details.appendChild(row2);
+            itemDiv.append(details, removeBtn);
             container.appendChild(itemDiv);
 
             total += item.quantity * item.meal_price;
@@ -245,7 +325,6 @@
 
           document.getElementById('order-count').textContent = count;
           document.getElementById('total-amount').textContent = total.toFixed(2);
-
           const tax = total * 0.1;
           const discount = total * discountRate;
           const final = total + tax - discount;
@@ -262,42 +341,44 @@
 
       <!-- Payment Section -->
       <section id="payment" class="hidden-section">
-        <div class="client-recharge-container">
-          <!-- Client Info (centered) -->
-          <div class="client-info">
-            <p><strong>Name:</strong> <span id="client-name">-</span></p>
-            <p><strong>Card Number:</strong> <span id="client-card">-</span></p>
-            <p><strong>Balance:</strong> €<span id="client-balance">-</span></p>
+        <div class="payment-wrapper">
+          <div class="client-recharge-container">
+            <!-- Client Info -->
+            <div class="client-info">
+              <p><strong>Name:</strong> <span id="client-name">-</span></p>
+              <p><strong>Card Number:</strong> <span id="client-card">-</span></p>
+              <p><strong>Balance:</strong> €<span id="client-balance">-</span></p>
+            </div>
+            <!-- Recharge Side -->
+            <div class="recharge-side">
+              <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
+              <div id="recharge-box" class="recharge-box hidden">
+                <input type="number" placeholder="Amount to recharge..." id="recharge-amount">
+                <button onclick="saveRecharge()" class="save-recharge-btn">Save</button>
+              </div>
+            </div>
           </div>
-          <!-- Recharge Side (button always visible, hidden input/save revealed on click) -->
-          <div class="recharge-side">
-            <button onclick="toggleRecharge()" class="recharge-btn">Recharge</button>
-            <div id="recharge-box" class="recharge-box hidden">
-              <input type="number" placeholder="Amount to recharge..." id="recharge-amount">
-              <button onclick="saveRecharge()" class="save-recharge-btn">Save</button>
+      
+          <!-- Payment Method Selection -->
+          <div class="payment-methods">
+            <h2 class="payment-selection-title">Select a payment method</h2>
+            <div class="method-options">
+              <div class="method-box" onclick="selectMethod('cash')">
+                <img src="/images/cash.png" alt="Cash">
+                <p>Cash</p>
+              </div>
+              <div class="method-box" onclick="selectMethod('credit')">
+                <img src="/images/creditcard.png" alt="Credit Card">
+                <p>Credit Card</p>
+              </div>
+              <div class="method-box" id="balance-box" onclick="selectMethod('balance')">
+                <img src="/images/balance.png" alt="Balance">
+                <p>Balance</p>
+              </div>
             </div>
           </div>
         </div>
-        
-        <!-- Payment Method Selection -->
-        <div class="payment-methods">
-          <p>Select a payment method:</p>
-          <div class="method-options">
-            <div class="method-box" onclick="selectMethod('cash')">
-              <img src="/images/cash.png" alt="Cash">
-              <p>Cash</p>
-            </div>
-            <div class="method-box" onclick="selectMethod('credit')">
-              <img src="/images/creditcard.png" alt="Credit Card">
-              <p>Credit Card</p>
-            </div>
-            <div class="method-box" id="balance-box" onclick="selectMethod('balance')">
-              <img src="/images/balance.png" alt="Balance">
-              <p>Balance</p>
-            </div>
-          </div>
-        </div>
-      </section>    
+      </section>               
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
@@ -497,7 +578,20 @@
         balanceBox.classList.remove('disabled');
       }
     }
+
     function selectMethod(method) {
+      document.querySelectorAll('.method-box').forEach(box => box.classList.remove('selected'));
+
+      if (method === 'balance') {
+        const balanceBox = document.getElementById('balance-box');
+        if (!balanceBox.classList.contains('disabled')) {
+          balanceBox.classList.add('selected');
+        }
+      } else {
+        const box = Array.from(document.querySelectorAll('.method-box')).find(el => el.onclick.toString().includes(method));
+        if (box) box.classList.add('selected');
+      }
+
       submitOrder(method);
     }
     
@@ -600,9 +694,6 @@
         console.error("Error submitting order:", e);
       }
     }
-
-    
-
   </script>  
 </body>
 </html>
