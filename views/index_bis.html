@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,6 +37,294 @@
     <script src="/js/index_bis.js"></script>
 </body>
 </html>
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canteleen</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .carousel-section {
+    width: 100vw;
+    height: 80vh; /* increased from 50vh */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    }
+
+    .carousel-entry-screen {
+      background-color: #e0f2fe;
+    }
+
+    .carousel-stand-screen {
+      background-color: #fef3c7;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .slider-item {
+      min-width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    .slider-item.active {
+      display: flex;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1;
+      border-radius: 8px;
+    }
+
+    .arrow.left {
+      left: 10px;
+    }
+
+    .arrow.right {
+      right: 10px;
+    }
+
+    .simulated-menu-screen {
+    background-color: white;
+    border: 2px solid #1e3a8a;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px; /* reduced */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    }
+
+    .meal-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    flex: 1;
+    }
+
+    .meal-price {
+    font-size: 1rem;
+    color: #1e3a8a;
+    flex: 0 0 80px;
+    text-align: center;
+    }
+
+    .meal-image {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    }
+
+    .info-screen-wrapper {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: auto; /* Let content size naturally */
+    max-height: 400px;
+    overflow-y: auto;
+    }
+
+    .dish-type-title {
+    font-size: 1rem;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.25rem;
+    }
+
+    .info-dish {
+    background-color: #f9fafb;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem;
+    }
+
+    .info-dish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    }
+
+    .dish-name {
+    font-size: 0.9rem;
+    }
+
+    .allergens {
+    font-size: 0.9rem;
+    }
+
+    .info-dish p {
+    font-size: 0.85rem;
+    margin: 2px 0;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="title">Canteleen</div>
+    <div class="auth-buttons">
+      <button class="auth-btn" onclick="window.location.href='/login'">Login</button>
+      <button class="auth-btn" onclick="window.location.href='/signup'">Sign up</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Section 1: Daily Menu -->
+    <section class="carousel-section carousel-entry-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel">
+        <!---Menu screen-->
+        <div class="slider-item active">
+            <div class="simulated-menu-screen">
+              <div class="menu-row">
+                <span class="meal-name">Spaghetti</span>
+                <span class="meal-price">€8.50</span>
+                <img src="/images/menu-meat.jpg" alt="Spaghetti" class="meal-image">
+              </div>
+              <div class="menu-row">
+                <span class="meal-name">Caesar Salad</span>
+                <span class="meal-price">€6.50</span>
+                <img src="/images/menu-vegeterian.jpg" alt="Caesar Salad" class="meal-image">
+              </div>
+              <div class="menu-row">
+                <span class="meal-name">Fish Tacos</span>
+                <span class="meal-price">€7.00</span>
+                <img src="/images/menu-fish.jpg" alt="Fish Tacos" class="meal-image">
+              </div>
+              <div class="menu-row">
+                <span class="meal-name">Fruit Bowl</span>
+                <span class="meal-price">€4.50</span>
+                <img src="/images/menu-dessert.jpg" alt="Fruit Bowl" class="meal-image">
+              </div>
+              <div class="menu-row">
+                <span class="meal-name">Lentil Soup</span>
+                <span class="meal-price">€5.00</span>
+                <img src="/images/menu-starters.jpg" alt="Lentil Soup" class="meal-image">
+              </div>
+            </div>
+        </div>                  
+        <div class="slider-item">Map</div>
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+
+    <!-- Section 2: Info Screens -->
+    <section class="carousel-section carousel-stand-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel">
+        <div class="slider-item active">
+            <div class="info-screen-wrapper">
+              <h2 class="dish-type-title">Dish Type: Meat</h2>
+              <div class="info-dish">
+                <div class="info-dish-header">
+                  <span class="dish-name">Grilled Chicken</span>
+                  <span class="allergens">🐔 🧂</span>
+                </div>
+                <p><strong>Ingredients:</strong> Chicken breast, olive oil, herbs, salt</p>
+                <p><strong>Nutritional values:</strong> 250 kcal, 30g protein, 10g fat</p>
+              </div>
+              <div class="info-dish">
+                <div class="info-dish-header">
+                  <span class="dish-name">Beef Stroganoff</span>
+                  <span class="allergens">🐄 🍄 🧂</span>
+                </div>
+                <p><strong>Ingredients:</strong> Beef, mushrooms, cream, onion, garlic</p>
+                <p><strong>Nutritional values:</strong> 370 kcal, 25g protein, 20g fat</p>
+              </div>
+            </div>
+          </div>          
+        <div class="slider-item">Info Screen 2</div>
+        <div class="slider-item">Info Screen 3</div>
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+  </main>
+
+  <script>
+    function initCarousel(sectionClass) {
+      let index = 0;
+      const section = document.querySelector(sectionClass);
+      const slides = section.querySelectorAll('.slider-item');
+      const left = section.querySelector('.arrow.left');
+      const right = section.querySelector('.arrow.right');
+
+      const updateSlides = () => {
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      };
+
+      left.addEventListener('click', () => {
+        index = (index - 1 + slides.length) % slides.length;
+        updateSlides();
+      });
+
+      right.addEventListener('click', () => {
+        index = (index + 1) % slides.length;
+        updateSlides();
+      });
+
+      updateSlides();
+    }
+
+    initCarousel('.carousel-entry-screen');
+    initCarousel('.carousel-stand-screen');
+  </script>
+</body>
+</html>
+
+
+
 
 
 
