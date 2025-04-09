@@ -110,11 +110,9 @@ body {
   
   
   .meal-img {
-    width: 80px;
+    width: 60px;
     height: 60px;
-    object-fit: contain;
-    /* margin-left: 20px; */
-    filter: brightness(0.9);
+    object-fit: cover
   }
   
   @media (max-width: 600px) {

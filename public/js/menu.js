@@ -91,22 +91,25 @@ document.addEventListener('DOMContentLoaded', async () => {
           
             switch (meal.meal_type.toLowerCase()) {
               case "starter":
-                img.src = "/images/startericon.png";
+                img.src = "/images/menu-starters.jpg";
                 break;
               case "meat":
-                img.src = "/images/meaticon.png";
+                img.src = "/images/menu-meat.jpg";
                 break;
               case "vegetarian":
-                img.src = "/images/vegetarianicon.png";
+                img.src = "/images/menu-vegeterian.jpg";
+                break;
+                case "vegeterian":
+                img.src = "/images/menu-vegeterian.jpg";
                 break;
               case "fish":
-                img.src = "/images/fishicon.png";
+                img.src = "/images/menu-fish.jpg";
                 break;
               case "dessert":
-                img.src = "/images/desserticon.png";
+                img.src = "/images/menu-dessert.jpg";
                 break;
               default:
-                img.src = "/images/defaultmeal.png";
+                img.src = "/images/meaticon.png";
             }
           
             mealRow.append(infoContainer, img);
