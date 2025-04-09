@@ -4,6 +4,10 @@ body {
     padding: 20px;
 }
 
+h2 {
+    text-align: center;
+}
+
 .meal-row {
     border-bottom: 1px solid #ccc;
     padding: 20px 0;

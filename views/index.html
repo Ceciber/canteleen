@@ -1,34 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canteleen</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canteleen</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/index.css" />
+
 </head>
 <body>
-    <header class="toolbar">
-        <div class="title">Canteleen</div>
-        <div class="auth-buttons">
-          <button class="auth-btn" onclick="window.location.href='/login'">Login</button>
-          <button class="auth-btn" onclick="window.location.href='/signup'">Sign up</button>
-      </div>      
-    </header>
+  <header class="toolbar">
+    <div class="title">Canteleen</div>
+    <div class="auth-buttons">
+      <button class="auth-btn" onclick="window.location.href='/login'">Login</button>
+      <button class="auth-btn" onclick="window.location.href='/signup'">Sign up</button>
+    </div>
+  </header>
 
-    <main class="main-content">
-        <div class="button-row">
-            <button class="main-btn">Menu</button>
-            <button class="main-btn">Map</button>
-        </div>
-        <div class="button-row">
-            <button class="main-btn">Starters</button>
-            <button class="main-btn">Meat</button>
-            <button class="main-btn">Vegetarian</button>
-            <button class="main-btn">Fish</button>
-            <button class="main-btn">Desert</button>
-        </div>
-    </main>
+  <main>
+    <!-- Section 1: Daily Menu -->
+    <section class="carousel-section carousel-entry-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel">
+        <!---Menu screen-->
+        <div class="slider-item active">
+            <div class="simulated-menu-screen">
 
-    <script src="/js/main.js"></script>
+            </div>
+        </div> 
+
+        <!---Map screen-->
+        <div class="slider-item">
+            <div class="simulated-map-screen">
+                <img src="/images/map.svg" alt="Map" class="map">
+        
+                <ol class="category-list">
+                    <li>Starters</li>
+                    <li>Meat</li>
+                    <li>Vegetarian</li>
+                    <li>Fish</li>
+                    <li>Dessert</li>
+                </ol>
+            </div>
+        </div>
+
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+
+    <!-- Section 2: Info Screens -->
+    <section class="carousel-section carousel-stand-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel" id = "Screens">
+        <!-- Here will be displayed the stand screen -->
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+  </main>
+
+  <script src="js/index.js"></script>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,217 @@
+.carousel-section {
+    width: 100vw;
+    height: 80vh; /* increased from 50vh */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    }
+
+    .carousel-entry-screen {
+      background-color: #e0f2fe;
+    }
+
+    .carousel-stand-screen {
+      background-color: #fef3c7;
+    }
+
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 100%;
+      max-width: 960px;
+      margin: auto;
+    }
+    
+    .slider-item {
+      min-width: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .slider-item.active {
+      display: flex;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1;
+      border-radius: 8px;
+    }
+
+    .arrow.left {
+      left: 10px;
+    }
+
+    .arrow.right {
+      right: 10px;
+    }
+
+    .simulated-menu-screen, .simulated-map-screen {
+    background-color: white;
+    border: 2px solid #1e3a8a;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px; /* reduced */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    }
+
+    .simulated-map-screen {
+    align-items: center;
+    }
+    
+
+    .simulated-menu-screen:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+
+    /* Menu row styling */
+  .menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menu-row:hover {
+    background-color: #e6f0ff;
+  }
+  
+  /* Menu info */
+  .menu-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+  }
+  
+  .meal-type {
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #1e3a8a;
+    margin-bottom: 5px;
+  }
+  
+  .meal-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    align-items: center;
+  }
+  
+  .meal-name {
+    padding-left: 10px;
+    color: #333;
+  }
+  
+ 
+  
+  .meal-price {
+    color: #1e3a8a;
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  .meal-image {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Add some space between the image and the text */
+  .menu-row img {
+    margin-left: 15px;
+  }
+
+    .info-screen-wrapper {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: auto; /* Let content size naturally */
+    max-height: 400px;
+    overflow-y: auto;
+    }
+
+    .dish-type-title {
+    font-size: 1rem;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.25rem;
+    }
+
+    .info-dish {
+    background-color: #f9fafb;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem;
+    }
+
+    .info-dish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    }
+
+    .dish-name {
+    font-size: 0.9rem;
+    }
+
+    .allergens {
+    font-size: 0.9rem;
+    }
+
+    .info-dish p {
+    font-size: 0.85rem;
+    margin: 2px 0;
+    }
+
+
+    .category-list {
+      list-style-type: decimal; /* Numérotation */
+      text-align: left;
+      max-width: 100px; 
+      padding-left: 20px;
+      font-size: 18px;
+  }
+  
+  .category-list li::marker {
+      color: #e59c78; /* Couleur des numéros */
+    }

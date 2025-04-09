@@ -126,6 +126,8 @@
 
           <!-- Right Sidebar -->
           <aside class="order-sidebar" id="order-sidebar">
+            <button id="toggle-sidebar" class="sidebar-toggle">➤</button> <!-- Arrow button -->
+
             <h3>Guest Type: <span id="guest-type-label">-</span></h3>
             <h4>Order Summary (<span id="order-count">0</span> items)</h4>
           
@@ -143,6 +145,16 @@
           </aside>
         </div>
       </section>
+
+      <script>
+        const sidebar = document.getElementById("order-sidebar");
+        const toggleBtn = document.getElementById("toggle-sidebar");
+
+        toggleBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("closed");
+          toggleBtn.innerHTML = sidebar.classList.contains("closed") ? "◀" : "➤";
+        });
+      </script>
 
       <script>
         async function loadMeals() {
@@ -163,6 +175,7 @@
               switch (meal.meal_type.toLowerCase()) {
                 case 'starter' : image.src = '/images/menu-starters.jpg'; break;
                 case 'meat': image.src = '/images/menu-meat.jpg'; break;
+                case 'vegeterian': image.src = '/images/menu-vegeterian.jpg'; break;
                 case 'vegetarian': image.src = '/images/menu-vegeterian.jpg'; break;
                 case 'fish': image.src = '/images/menu-fish.jpg'; break;
                 case 'dessert': image.src = '/images/menu-dessert.jpg'; break;

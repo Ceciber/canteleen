@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canteleen</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/index.css" />
+
+</head>
+<body>
+  <header class="toolbar">
+    <div class="title">Canteleen</div>
+    <div class="auth-buttons">
+      <button class="auth-btn" onclick="window.location.href='/login'">Login</button>
+      <button class="auth-btn" onclick="window.location.href='/signup'">Sign up</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Section 1: Daily Menu -->
+    <section class="carousel-section carousel-entry-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel">
+        <!---Menu screen-->
+
+        <div class="slider-item active">
+          <div class="simulated-menu-screen">
+            
+
+            <div class="menu-row">
+              <div  class="menu-info">
+                <span class="meal-type"> STARTERS </span>
+                
+                <div class="meal-info">
+                  <span class="meal-name"> - pain perdu 🐄 🧂</span>
+                  <span class="meal-price">€1.50</span>
+                </div>
+
+              </div>
+
+              <img src="/images/menu-starters.jpg" alt="Spaghetti" class="meal-image">
+            </div>
+
+
+            <div class="menu-row" id = "menu_Meat">
+              <div  class="menu-info">
+                <span class="meal-type"> MEAT </span>
+
+                <div class="meal-info">
+                  <span class="meal-name"> - Pasta 🐄 🍄 🧂</span>
+                  <span class="meal-price">€8.50</span>
+                </div>
+
+                <div class="meal-info">
+                  <span class="meal-name">- Spaghetti 🍄 🧂</span>
+                  <span class="meal-price">€6.50</span>
+                </div>
+              </div>
+
+              <img src="/images/menu-meat.jpg" alt="Spaghetti" class="meal-image">
+            </div>
+
+
+            <div class="menu-row">
+              <div  class="menu-info">
+                <span class="meal-type"> VEGETERIAN </span>
+                <div class="meal-info">
+                  <span class="meal-name">- Caesar Salad 🍄</span>
+                  <span class="meal-price">€6.50</span>
+                </div>
+                <div class="meal-info">
+                  <span class="meal-name">- Fish Taco 🐄 🍄 🧂</span>
+                  <span class="meal-price">€7.00</span>
+                </div>
+              </div>
+
+              <img src="/images/menu-vegeterian.jpg" alt="Spaghetti" class="meal-image">
+              
+            </div>
+
+            <div class="menu-row">
+
+              <div  class="menu-info">
+                <span class="meal-type"> DESSERT </span>
+                <div class="meal-info">
+                  <span class="meal-name">- Lentil Soup 🐄 🍄 🧂</span>
+                  <span class="meal-price">€4.50</span>
+                </div>
+                <div class="meal-info">
+                  <span class="meal-name">- Fruit Bowl 🐄 🍄 🧂</span>
+                  <span class="meal-price">€5.00</span>
+                </div>
+              </div>
+
+              <img src="/images/menu-dessert.jpg" alt="Spaghetti" class="meal-image">
+              
+            </div>
+
+          </div>
+      </div> 
+
+
+        <div class="slider-item active">
+            <div class="simulated-menu-screen">
+
+              <div class="menu-row">
+                <span class="meal-name">Spaghetti</span>
+                <span class="meal-price">€8.50</span>
+                <img src="/images/menu-meat.jpg" alt="Spaghetti" class="meal-image">
+              </div>
+
+              <div class="menu-row">
+                <span class="meal-name">Caesar Salad</span>
+                <span class="meal-price">€6.50</span>
+                <img src="/images/menu-vegeterian.jpg" alt="Caesar Salad" class="meal-image">
+              </div>
+
+              <div class="menu-row">
+                <span class="meal-name">Fish Tacos</span>
+                <span class="meal-price">€7.00</span>
+                <img src="/images/menu-fish.jpg" alt="Fish Tacos" class="meal-image">
+              </div>
+
+              <div class="menu-row">
+                <span class="meal-name">Fruit Bowl</span>
+                <span class="meal-price">€4.50</span>
+                <img src="/images/menu-dessert.jpg" alt="Fruit Bowl" class="meal-image">
+              </div>
+
+              <div class="menu-row">
+                <span class="meal-name">Lentil Soup</span>
+                <span class="meal-price">€5.00</span>
+                <img src="/images/menu-starters.jpg" alt="Lentil Soup" class="meal-image">
+              </div> 
+
+            </div>
+        </div> 
+
+        <div class="slider-item">
+            <div class="simulated-map-screen">
+                <img src="/images/map.svg" alt="Map" class="map">
+        
+                <ol class="category-list">
+                    <li>Starters</li>
+                    <li>Meat</li>
+                    <li>Vegetarian</li>
+                    <li>Fish</li>
+                    <li>Dessert</li>
+                </ol>
+            </div>
+        </div>
+
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+
+    <!-- Section 2: Info Screens -->
+    <section class="carousel-section carousel-stand-screen">
+      <button class="arrow left">&#9664;</button>
+      <div class="carousel" id = "Screens">
+
+        <div class="slider-item active">
+
+            <div class="info-screen-wrapper">
+
+              <h2 class="dish-type-title">Dish Type: Meat</h2>
+
+              <div class="info-dish">
+                <div class="info-dish-header">
+                  <span class="dish-name">Grilled Chicken</span>
+                  <span class="allergens">🐔 🧂</span>
+                </div>
+                <p><strong>Ingredients:</strong> Chicken breast, olive oil, herbs, salt</p>
+                <p><strong>Nutritional values:</strong> 250 kcal, 30g protein, 10g fat</p>
+              </div>
+
+              <div class="info-dish">
+                <div class="info-dish-header">
+                  <span class="dish-name">Beef Stroganoff</span>
+                  <span class="allergens">🐄 🍄 🧂</span>
+                </div>
+                <p><strong>Ingredients:</strong> Beef, mushrooms, cream, onion, garlic</p>
+                <p><strong>Nutritional values:</strong> 370 kcal, 25g protein, 20g fat</p>
+              </div>
+
+            </div>
+
+        </div>   
+
+        <div class="slider-item">Info Screen 2</div>
+
+        <div class="slider-item">Info Screen 3</div> 
+
+      </div>
+      <button class="arrow right">&#9654;</button>
+    </section>
+  </main>
+
+  <script >
+    function initCarousel(sectionClass) {
+        let index = 0;
+        const section = document.querySelector(sectionClass);
+        const slides = section.querySelectorAll('.slider-item');
+        const left = section.querySelector('.arrow.left');
+        const right = section.querySelector('.arrow.right');
+
+        const updateSlides = () => {
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        };
+
+        left.addEventListener('click', () => {
+            index = (index - 1 + slides.length) % slides.length;
+            updateSlides();
+        });
+
+        right.addEventListener('click', () => {
+            index = (index + 1) % slides.length;
+            updateSlides();
+        });
+
+        updateSlides();
+    }
+
+    initCarousel('.carousel-entry-screen');
+    initCarousel('.carousel-stand-screen');
+
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

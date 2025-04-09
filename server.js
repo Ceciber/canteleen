@@ -32,8 +32,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/index', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index_bis.html'));
+  res.sendFile(path.join(__dirname, 'views', 'index_hard_coded.html'));
 });
+
+app.get('/test1', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'test.html'));
+});
+
+app.get('/test2', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'test2.html'));
+});
+
 
 // Route for login page (GET)
 app.get('/login', (req, res) => {
@@ -73,7 +82,6 @@ app.post('/signup', (req, res) => {
 
 // Cashier dashboard page
 app.get('/cashier', (req, res) => {
-  console.log("Serving cashier.html");
   res.sendFile(path.join(__dirname, 'views', 'cashier.html'));
 });
 

@@ -73,6 +73,17 @@ body {
   overflow-y: auto; /* ✅ scroll allowed */
   padding: 0 20px;
 }
+
+/*  if we want to make the main smaller so that the aside in the Menu selection will not be on it
+.cashier-main {
+  padding-right: 300px; 
+  transition: padding-right 0.3s ease-in-out; 
+}
+
+.cashier-main.order-sidebar-closed {
+  padding-right: 0;
+} */
+
   
 .search-bar {
     display: flex;
@@ -331,25 +342,7 @@ body {
     background-color: #ffe5e5;
 }
 
-/*Hompegae for placing the order*/
-.order-sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 320px;
-  height: 100vh;
-  background-color: #f8fafc;
-  border-left: 1px solid #e2e8f0;
-  padding: 20px;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
-  overflow-y: auto;
-}
 
-.order-sidebar h3,
-.order-sidebar h4 {
-    margin-top: 0;
-    color: #1e3a8a;
-}
 
 .order-items {
   margin: 15px 0;
@@ -830,3 +823,48 @@ body {
   pointer-events: none;
 }
   
+
+/*Hompegae for placing the order*/
+.order-sidebar h3,
+.order-sidebar h4 {
+    margin-top: 0;
+    color: #1e3a8a;
+}
+
+/* sidebare arrow */
+.order-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background: #f8f8f8;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+  padding: 20px;
+  overflow: visible;
+}
+
+/* When closed */
+.order-sidebar.closed {
+  right: -280px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 20px;
+  left: -40px; /* make sure it's outside the sidebar */
+  width: 40px;
+  height: 40px;
+  background-color: rgb(216, 216, 216);
+  color: white;
+  border: none;
+  border-radius: 5px 0 0 5px ;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}

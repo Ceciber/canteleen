@@ -31,16 +31,33 @@
         </div>
         
         <!-- Tabs for Filtering -->
-        <div class="menu-tabs">
-          <button class="menu-tab" onclick="filterMeals('All')">All</button>
-          <button class="menu-tab" onclick="filterMeals('Menu')">Menu</button>
-          <button class="menu-tab" onclick="filterMeals('Meat')">Meat</button>
-          <button class="menu-tab" onclick="filterMeals('Vegetarian')">Vegetarian</button>
-          <button class="menu-tab" onclick="filterMeals('Fish')">Fish</button>
-          <button class="menu-tab" onclick="filterMeals('Dessert')">Dessert</button>
+
+        <div class="category-section">
+          <h3 class="category-title">Choose Category</h3>
+          <div class="category-tabs">
+            <button class="category-tab" onclick="filterMeals('All')">
+              <img src="/images/all.png" alt="All"><span>All</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Starter')">
+              <img src="/images/starters.png" alt="Starter"><span>Starter</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Meat')">
+              <img src="/images/hamburger.png" alt="Meat"><span>Meat</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Fish')">
+              <img src="/images/seafood.png" alt="Fish"><span>Fish</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Vegeterian')">
+              <img src="/images/vegeterian.png" alt="Vegeterian"><span>Vegeterian</span>
+            </button>
+            <button class="category-tab" onclick="filterMeals('Dessert')">
+              <img src="/images/dessert.png" alt="Dessert"><span>Dessert</span>
+            </button>
+          </div>
         </div>
         
         <!-- Grid of Meal Tiles -->
+        <h3 class="menu-section-title">Modify Dish</h3>
         <div class="menu-grid">
           <!-- Tiles will be loaded dynamically -->
         </div>
@@ -53,38 +70,45 @@
             const meals = await response.json();
             const grid = document.querySelector('.menu-grid');
             grid.innerHTML = ''; // Clear current tiles
+
             meals.forEach(meal => {
               const tile = document.createElement('div');
               tile.className = 'meal-tile';
               tile.setAttribute('data-meal-type', meal.meal_type);
               tile.setAttribute('data-inmenu', meal.inMenu);
 
+              // Meal image
+              const image = document.createElement('img');
+              image.className = 'meal-image';
+              switch (meal.meal_type.toLowerCase()) {
+                case "starter":
+                  image.src = "/images/menu-starters.jpg";
+                  break;
+                case "meat":
+                  image.src = "/images/menu-meat.jpg";
+                  break;
+                case "vegetarian":
+                  image.src = "/images/menu-vegeterian.jpg";
+                  break;
+                  case "vegeterian":
+                  image.src = "/images/menu-vegeterian.jpg";
+                  break;
+                case "fish":
+                  image.src = "/images/menu-fish.jpg";
+                  break;
+                case "dessert":
+                  image.src = "/images/menu-dessert.jpg";
+                  break;
+                default:
+                  image.src = "/images/meaticon.png";
+              }
+              tile.appendChild(image);
+
               // Meal name
               const nameDiv = document.createElement('div');
               nameDiv.className = 'meal-name';
               nameDiv.textContent = meal.meal_name;
               tile.appendChild(nameDiv);
-
-              // Meal image
-              const image = document.createElement('img');
-              image.className = 'meal-image';
-              switch (meal.meal_type.toLowerCase()) {
-                case 'vegetarian':
-                  image.src = '/images/vegetarianicon.png';
-                  break;
-                case 'meat':
-                  image.src = '/images/meaticon.png';
-                  break;
-                case 'fish':
-                  image.src = '/images/fishicon.png';
-                  break;
-                case 'dessert':
-                  image.src = '/images/desserticon.png';
-                  break;
-                default:
-                  image.src = '/images/defaultmeal.png';
-              }
-              tile.appendChild(image);
 
               // Price
               const priceDiv = document.createElement('div');
@@ -198,7 +222,7 @@
       <!-- Orders Section -->
     <section id="orders" class="hidden-section">
       <!-- Top Summary Row -->
-      <div class="orders-summary">
+      <!-- <div class="orders-summary">
         <div class="summary-item">
           <label>Total Income</label>
           <div id="total-income">€0.00</div>
@@ -223,7 +247,33 @@
           <label>Amount of Desserts ordered</label>
           <div id="dessert-count">0</div>
         </div>
-      </div>  
+      </div>   -->
+
+      <table class="orders-summary">
+        <thead>
+          <tr class="summary-item">
+            <th><label>Total Income</label></th>
+            <th><label>Total Orders</label></th>
+            <th><label>Amount of Meat meals ordered</label></th>
+            <th><label>Amount of Fish meals ordered</label></th>
+            <th><label>Amount of Vegetarian meals ordered</label></th>
+            <th><label>Amount of Desserts ordered</label></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="summary-item">
+            <td id="total-income">€0.00</td>
+            <td id="total-orders">0</td>
+            <td id="meat-count">0</td>
+            <td id="fish-count">0</td>
+            <td id="vegetarian-count">0</td>
+            <td id="dessert-count">0</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      
+      
       
       <!-- Orders Header with Date Picker -->
       <div class="orders-header-bar">
