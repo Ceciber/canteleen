@@ -69,7 +69,7 @@ For testing purposes, two system accounts are pre-configured:
 
 Accessible after logging in as a **Cashier**.
 
-- Select the **guest type** (e.g., student, teacher, visitor), which applies a discount.
+- Select the **guest type** (student, teacher, visitor, other), which applies a discount.
 - Add items to a guest’s order from the available daily menu.
 - Manage and adjust the order before checkout.
 - Simulate payment using:
@@ -91,10 +91,10 @@ Accessible after logging in as a **Manager**.
 
 - **Manage Dishes**:
   - Add, edit, and remove meals in the database.
-  - Upload images, set nutrients, ingredients, dish type, allergens, and price.
+  - Set nutrients, ingredients, dish type, allergens, and price.
   
 - **Create Menu of the Day**:
-  - Choose which dishes are visible on the public menu screen (1 per type).
+  - Choose which dishes are visible on the public menu screen.
 
 - **View Orders**:
   - See a list of all previous orders.
@@ -111,7 +111,6 @@ Accessible after logging in as a **Manager**.
 - **Frontend**: HTML, CSS, JavaScript
 - **Backend**: Node.js (Express)
 - **Database**: SQLite / JSON-based mock storage (depending on deployment)
-- **Styling**: Custom CSS using a modern and clean blue-white theme
 
 ---
 
