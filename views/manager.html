@@ -11,12 +11,21 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-top">
-        <button onclick="showSection('menu')"><img src="/images/menuicon.png" alt="Menu" class="sidebar-icon"></button>
-        <button onclick="showSection('orders')"><img src="/images/ordersicon.png" alt="Orders" class="sidebar-icon"></button>
+        <button onclick="showSection('menu')">
+          <img src="/images/menuicon.png" alt="Menu" class="sidebar-icon">
+          <span>Menu</span>
+        </button>
+        <button onclick="showSection('orders')">
+          <img src="/images/ordersicon.png" alt="Orders" class="sidebar-icon">
+          <span>Orders</span>
+        </button>
       </div>
       <div class="sidebar-bottom">
         <hr>
-        <button onclick="showSection('profile')"><img src="/images/profileicon.png" alt="Profile" class="sidebar-icon"></button>
+        <button onclick="showSection('profile')">
+          <img src="/images/profileicon.png" alt="Profile" class="sidebar-icon">
+          <span>Profile</span>
+        </button>
       </div>
     </aside>
 
@@ -528,63 +537,65 @@
 
       <!-- Profile Section -->
       <section id="profile" class="hidden-section">
-        <!-- Profile header with welcome message -->
-        <div class="profile-header">
-          <h2>Welcome, <span id="profile-username">manager</span></h2>
-        </div>
-
-        <!-- Horizontal container for profile picture, details, and edit button -->
-        <div class="profile-info">
-          <!-- 1) Profile picture -->
-          <div class="profile-picture">
-            <img src="/images/profile.png" alt="Profile Picture">
+        <div class="profile-wrapper">
+          <!-- Profile header with welcome message -->
+          <div class="profile-header">
+            <h2>Welcome, <span id="profile-username">manager</span></h2>
           </div>
 
-          <!-- 2) Profile details -->
-          <div class="profile-details">
-            <p>Name: <span id="profile-fullname">Jane Smith</span></p>
-            <p>Email: <span id="profile-email">jane@example.com</span></p>
-            <p>Role: <span id="profile-role">manager</span></p>
+          <!-- Horizontal container for profile picture, details, and edit button -->
+          <div class="profile-info">
+            <!-- 1) Profile picture -->
+            <div class="profile-picture">
+              <img src="/images/profile.png" alt="Profile Picture">
+            </div>
+
+            <!-- 2) Profile details -->
+            <div class="profile-details">
+              <p>Name: <span id="profile-fullname">Jane Smith</span></p>
+              <p>Email: <span id="profile-email">jane@example.com</span></p>
+              <p>Role: <span id="profile-role">manager</span></p>
+            </div>
+
+            <!-- 3) Edit button -->
+            <div class="profile-edit-btn">
+              <button onclick="toggleProfileEdit()">Edit</button>
+            </div>
           </div>
 
-          <!-- 3) Edit button -->
-          <div class="profile-edit-btn">
-            <button onclick="toggleProfileEdit()">Edit</button>
+          <!-- Grid for editable fields (3 columns x 2 rows) -->
+          <div class="profile-grid">
+            <div class="profile-field">
+              <label for="edit-fullname">Full Name</label>
+              <input type="text" id="edit-fullname" value="Jane Smith" disabled>
+            </div>
+            <div class="profile-field">
+              <label for="edit-username">Username</label>
+              <input type="text" id="edit-username" value="manager" disabled>
+            </div>
+            <div class="profile-field">
+              <label for="edit-gender">Gender</label>
+              <input type="text" id="edit-gender" value="Female" disabled>
+            </div>
+            <div class="profile-field">
+              <label for="edit-country">Country</label>
+              <input type="text" id="edit-country" value="France" disabled>
+            </div>
+            <div class="profile-field">
+              <label for="edit-language">Language</label>
+              <input type="text" id="edit-language" value="French" disabled>
+            </div>
+            <div class="profile-field">
+              <label for="edit-email">Email</label>
+              <input type="text" id="edit-email" value="jane@example.com" disabled>
+            </div>
           </div>
-        </div>
 
-        <!-- Grid for editable fields (3 columns x 2 rows) -->
-        <div class="profile-grid">
-          <div class="profile-field">
-            <label for="edit-fullname">Full Name</label>
-            <input type="text" id="edit-fullname" value="Jane Smith" disabled>
+          <!-- Erase Account and Log out Section -->
+          <div class="account-actions">
+            <p class="action-link" onclick="eraseAccount()">Erase account</p>
+            <p class="action-link" onclick="logout()">Log out</p>
           </div>
-          <div class="profile-field">
-            <label for="edit-username">Username</label>
-            <input type="text" id="edit-username" value="manager" disabled>
-          </div>
-          <div class="profile-field">
-            <label for="edit-gender">Gender</label>
-            <input type="text" id="edit-gender" value="Female" disabled>
-          </div>
-          <div class="profile-field">
-            <label for="edit-country">Country</label>
-            <input type="text" id="edit-country" value="France" disabled>
-          </div>
-          <div class="profile-field">
-            <label for="edit-language">Language</label>
-            <input type="text" id="edit-language" value="French" disabled>
-          </div>
-          <div class="profile-field">
-            <label for="edit-email">Email</label>
-            <input type="text" id="edit-email" value="jane@example.com" disabled>
-          </div>
-        </div>
-
-        <!-- Erase Account and Log out Section -->
-        <div class="account-actions">
-          <p class="action-link" onclick="eraseAccount()">Erase account</p>
-          <p class="action-link" onclick="logout()">Log out</p>
         </div>
         
 

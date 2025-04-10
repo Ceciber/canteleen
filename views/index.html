@@ -10,7 +10,9 @@
 </head>
 <body>
   <header class="toolbar">
-    <div class="title">Canteleen</div>
+    <div class="title">
+        <img src="/images/canteleen-logo.png" alt="Canteleen Logo" class="logo" />
+    </div>
     <div class="auth-buttons">
       <button class="auth-btn" onclick="window.location.href='/login'">Login</button>
       <button class="auth-btn" onclick="window.location.href='/signup'">Sign up</button>
@@ -25,6 +27,7 @@
         <!---Menu screen-->
         <div class="slider-item active">
             <div class="simulated-menu-screen">
+              <h2 class="section-title">Menu of the Day</h2>
 
             </div>
         </div> 
@@ -32,6 +35,7 @@
         <!---Map screen-->
         <div class="slider-item">
             <div class="simulated-map-screen">
+              <h2 class="section-title">Map of the Cantine</h2>
                 <img src="/images/map.svg" alt="Map" class="map">
         
                 <ol class="category-list">
@@ -50,12 +54,16 @@
 
     <!-- Section 2: Info Screens -->
     <section class="carousel-section carousel-stand-screen">
-      <button class="arrow left">&#9664;</button>
-      <div class="carousel" id = "Screens">
-        <!-- Here will be displayed the stand screen -->
+      <button class="arrow left">&#9664;</button> <!-- Moved out -->
+      
+      <div class="carousel-inner-wrapper">
+        <h2 class="section-title inside-carousel-title">At each stand</h2>
+        <div class="carousel" id="Screens"></div>
       </div>
-      <button class="arrow right">&#9654;</button>
+    
+      <button class="arrow right">&#9654;</button> <!-- Moved out -->
     </section>
+
   </main>
 
   <script src="js/index.js"></script>

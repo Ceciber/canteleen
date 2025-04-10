@@ -1,20 +1,20 @@
-.carousel-section {
+/*.carousel-section {
     width: 100vw;
-    height: 80vh; /* increased from 50vh */
+    height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    }
+    } */
 
     .carousel-entry-screen {
       background-color: #e0f2fe;
     }
 
-    .carousel-stand-screen {
+    /*.carousel-stand-screen {
       background-color: #fef3c7;
-    }
+    }*/
 
 
     .carousel {
@@ -39,7 +39,7 @@
       display: flex;
     }
 
-    .arrow {
+    /*.arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -51,7 +51,7 @@
       cursor: pointer;
       z-index: 1;
       border-radius: 8px;
-    }
+    } */
 
     .arrow.left {
       left: 10px;
