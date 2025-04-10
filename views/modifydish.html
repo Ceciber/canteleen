@@ -184,70 +184,146 @@
       border: none;
       cursor: pointer;
     }
+
+    .modifydish-totalcontent {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .sidebar {
+      width: 200px;
+      background-color: #1e3a8a;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+    
+    .sidebar-top,
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      width: 100%;
+      color: white;
+      font-size: 1rem;
+      transition: background 0.3s ease-in-out;
+      text-align: left;
+    }
+    
+    .sidebar button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+    
+    .sidebar button:hover,
+    .sidebar button.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-left: 4px solid #fff;
+    }
+    
+    .sidebar-bottom hr {
+      width: 80%;
+      border: 1px solid #e5e7eb;
+      margin: 1rem auto;
+    }
+    
   </style>
 </head>
 <body>
-  <div class="adddish-container">
-    <h2>Modify Dish</h2>
+  <div class="modifydish-totalcontent">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <button id="btn-return" onclick="window.location.href='/manager'">
+          <img src="/images/returnicon.png" alt="Return">
+          <span>Return</span>
+        </button>
+      </div>
+      <div class="sidebar-bottom">
+        <hr>
+        <button id="btn-profile" onclick="window.location.href='/manager#profile'">
+          <img src="/images/profileicon.png" alt="Profile">
+          <span>Profile</span>
+        </button>
+      </div>
+    </aside>
+    <div class="adddish-container">
+      <h2>Modify Dish</h2>
 
-    <!-- Meal Info Section -->
-    <div class="section">
-      <div class="input-group">
-        <input type="text" id="meal-name" class="input-field" placeholder="Meal Name">
-        <select id="meal-type" class="input-field">
-          <option disabled selected>Select Type</option>
-          <option>Starter</option>
-          <option>Meat</option>
-          <option>Fish</option>
-          <option>Vegetarian</option>
-          <option>Dessert</option>
-        </select>
-        <div class="price-field">
-          <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €">
-          <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1">
+      <!-- Meal Info Section -->
+      <div class="section">
+        <div class="input-group">
+          <input type="text" id="meal-name" class="input-field" placeholder="Meal Name">
+          <select id="meal-type" class="input-field">
+            <option disabled selected>Select Type</option>
+            <option>Starter</option>
+            <option>Meat</option>
+            <option>Fish</option>
+            <option>Vegetarian</option>
+            <option>Dessert</option>
+          </select>
+          <div class="price-field">
+            <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €">
+            <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1">
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Ingredients Section -->
-    <div class="section">
-      <div class="ingredients-list" id="ingredients-list"></div>
-      <div class="add-ingredient">
-        <input type="text" id="ingredient-input" class="input-field" placeholder="Add Ingredient">
-        <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
+      <!-- Ingredients Section -->
+      <div class="section">
+        <div class="ingredients-list" id="ingredients-list"></div>
+        <div class="add-ingredient">
+          <input type="text" id="ingredient-input" class="input-field" placeholder="Add Ingredient">
+          <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Nutrients Section -->
-    <div class="section nutrients">
-      <div class="nutrient">
-        <label for="nutrient-calories">Calories</label>
-        <input type="number" id="nutrient-calories" placeholder="0">
-        <span>kcal</span>
+      <!-- Nutrients Section -->
+      <div class="section nutrients">
+        <div class="nutrient">
+          <label for="nutrient-calories">Calories</label>
+          <input type="number" id="nutrient-calories" placeholder="0">
+          <span>kcal</span>
+        </div>
+        <div class="nutrient">
+          <label for="nutrient-sugar">Sugar</label>
+          <input type="number" id="nutrient-sugar" placeholder="0">
+          <span>g</span>
+        </div>
+        <div class="nutrient">
+          <label for="nutrient-sugar">Fat</label>
+          <input type="number" id="nutrient-fat" placeholder="0">
+          <span>g</span>
+        </div>
       </div>
-      <div class="nutrient">
-        <label for="nutrient-sugar">Sugar</label>
-        <input type="number" id="nutrient-sugar" placeholder="0">
-        <span>g</span>
-      </div>
-      <div class="nutrient">
-        <label for="nutrient-sugar">Fat</label>
-        <input type="number" id="nutrient-fat" placeholder="0">
-        <span>g</span>
-      </div>
-    </div>
 
-    <!-- Allergens Section -->
-    <div class="section allergens">
-      <label class="allergen-box"><input type="checkbox" id="allergen-gluten"><img src="/images/glutenicon.png"> Gluten</label>
-      <label class="allergen-box"><input type="checkbox" id="allergen-dairy"><img src="/images/dairyicon.png"> Dairy</label>
-      <label class="allergen-box"><input type="checkbox" id="allergen-eggs"><img src="/images/eggicon.png"> Eggs</label>
-      <label class="allergen-box"><input type="checkbox" id="allergen-peanuts"><img src="/images/peanuticon.png"> Peanuts</label>
-      <label class="allergen-box"><input type="checkbox" id="allergen-soy"><img src="/images/soyicon.png"> Soy</label>
-    </div>
+      <!-- Allergens Section -->
+      <div class="section allergens">
+        <label class="allergen-box"><input type="checkbox" id="allergen-gluten"><img src="/images/glutenicon.png"> Gluten</label>
+        <label class="allergen-box"><input type="checkbox" id="allergen-dairy"><img src="/images/dairyicon.png"> Dairy</label>
+        <label class="allergen-box"><input type="checkbox" id="allergen-eggs"><img src="/images/eggicon.png"> Eggs</label>
+        <label class="allergen-box"><input type="checkbox" id="allergen-peanuts"><img src="/images/peanuticon.png"> Peanuts</label>
+        <label class="allergen-box"><input type="checkbox" id="allergen-soy"><img src="/images/soyicon.png"> Soy</label>
+      </div>
 
-    <button class="validate-btn" onclick="validateModification()">Validate</button>
+      <button class="validate-btn" onclick="validateModification()">Validate</button>
+    </div>
   </div>
+
 
   <script>
     const priceInput = document.getElementById('meal-price');

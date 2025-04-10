@@ -619,8 +619,14 @@
 
     // Ensure the manager starts in the menu view
     document.addEventListener("DOMContentLoaded", () => {
-      showSection('menu');
+      const hash = window.location.hash;
+      if (hash === "#profile") {
+        showSection('profile');
+      } else {
+        showSection('menu');
+      }
     });
+    
 
     // Toggle between edit and save mode for profile editing
     async function toggleProfileEdit() {
