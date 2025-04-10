@@ -6,114 +6,257 @@
   <title>Add Dish - Canteleen Manager</title>
   <link rel="stylesheet" href="/css/managerstyle.css">
   <style>
-    /* Additional styles for Add Dish screen */
-    .adddish-container { padding: 20px; }
-    .adddish-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .adddish-header img { width: 50px; height: 50px; }
-    .adddish-header input[type="text"],
-    .adddish-header input[type="number"] {
-      padding: 10px; border: 1px solid #ccc; border-radius: 4px;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
     }
-    .ingredients-list { display: flex; gap: 10px; margin-bottom: 20px; }
-    .ingredient-item { padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; }
-    .add-ingredient-btn { padding: 10px 20px; background-color: #1e3a8a; color: white;
-      border: none; border-radius: 4px; cursor: pointer; }
-    .nutrients { display: flex; justify-content: space-around; margin-bottom: 20px; }
-    .nutrient { display: flex; flex-direction: column; align-items: center; }
-    .allergens { display: flex; gap: 20px; margin-bottom: 20px; justify-content: center; }
-    .allergens label { display: flex; align-items: center; gap: 5px; }
-    .validate-btn {
-      display: block; margin: 0 auto; padding: 10px 30px;
-      background-color: #1e3a8a; color: white; border: none; border-radius: 4px; cursor: pointer;
+
+    .adddish-container {
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
     }
+
+    .section {
+      background: white;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 40px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .input-field {
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .price-field {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .price-field input[type="number"] {
+      margin-bottom: 10px;
+    }
+
+    .price-slider {
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .nutrients {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .nutrient {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .nutrient label {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    
+
+    .nutrient input {
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      width: 100px;
+      text-align: center;
+    }
+
+    .nutrient span {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .ingredients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
     .ingredient-item {
+      background-color: #f1f5f9;
+      color: #1e293b;
+      font-size: 0.9rem;
+      border: 1px solid #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 16px;
       position: relative;
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background-color: #f0f0f0;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    
+
     .ingredient-item:hover {
-      background-color: #ffdddd;
+      background-color: #fee2e2;
     }
-    
-    .ingredient-item::after {
-      content: '✕';
-      position: absolute;
-      right: 8px;
-      top: 2px;
-      font-size: 12px;
-      color: red;
-      display: none;
-    }
-    
-    .ingredient-item:hover::after {
-      display: inline;
-    }
-    
-    /* New style to mark an ingredient as removed */
+
     .ingredient-item.removed {
       text-decoration: line-through;
       opacity: 0.5;
     }
-    
-    
+
+    .add-ingredient-btn {
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .add-ingredient {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .allergens {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .allergen-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 12px;
+      background-color: #f8fafc;
+      border: 1px solid #e5e7eb;
+      width: 140px;
+      justify-content: center;
+    }
+
+    .allergen-box img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .validate-btn {
+      display: block;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      padding: 16px 40px;
+      border-radius: 14px;
+      background-color: #1e3a8a;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="adddish-container">
-    <!-- Header with icon, meal name, meal type and price -->
-    <div class="adddish-header">
-      <img src="/images/examplemealitem.png" alt="Meal Icon">
-      <input type="text" id="meal-name" placeholder="Meal Name">
-      <input type="text" id="meal-type" placeholder="Meal Type (e.g., Meat)">
-      <input type="number" id="meal-price" placeholder="Price">
+    <h2>Create Dish</h2>
+
+    <!-- Meal Info Section -->
+    <div class="section">
+      <div class="input-group">
+        <input type="text" id="meal-name" class="input-field" placeholder="Meal Name">
+        <select id="meal-type" class="input-field">
+          <option disabled selected>Select Type</option>
+          <option>Starter</option>
+          <option>Meat</option>
+          <option>Fish</option>
+          <option>Vegetarian</option>
+          <option>Dessert</option>
+        </select>
+        <div class="price-field">
+          <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €">
+          <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1">
+        </div>
+      </div>
     </div>
 
-    <!-- Ingredients list with add functionality -->
-    <div class="ingredients-section">
-      <div class="ingredients-list" id="ingredients-list">
-        <!-- Ingredients will appear here -->
-      </div>
+    <!-- Ingredients Section -->
+    <div class="section">
+      <div class="ingredients-list" id="ingredients-list"></div>
       <div class="add-ingredient">
-        <input type="text" id="ingredient-input" placeholder="Add Ingredient">
+        <input type="text" id="ingredient-input" class="input-field" placeholder="Add Ingredient">
         <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
       </div>
     </div>
 
-    <!-- Nutrients fields -->
-    <div class="nutrients">
+    <!-- Nutrients Section -->
+    <div class="section nutrients">
       <div class="nutrient">
-        <label>Calories</label>
+        <label for="nutrient-calories">Calories</label>
         <input type="number" id="nutrient-calories" placeholder="0">
+        <span>kcal</span>
       </div>
       <div class="nutrient">
-        <label>Sugar</label>
+        <label for="nutrient-sugar">Sugar</label>
         <input type="number" id="nutrient-sugar" placeholder="0">
+        <span>g</span>
       </div>
       <div class="nutrient">
-        <label>Fat</label>
+        <label for="nutrient-sugar">Fat</label>
         <input type="number" id="nutrient-fat" placeholder="0">
+        <span>g</span>
       </div>
     </div>
 
-    <!-- Allergens checkboxes -->
-    <div class="allergens">
-      <label><input type="checkbox" id="allergen-gluten"> Gluten</label>
-      <label><input type="checkbox" id="allergen-dairy"> Dairy</label>
-      <label><input type="checkbox" id="allergen-eggs"> Eggs</label>
-      <label><input type="checkbox" id="allergen-peanuts"> Peanuts</label>
-      <label><input type="checkbox" id="allergen-soy"> Soy</label>
+    <!-- Allergens Section -->
+    <div class="section allergens">
+      <label class="allergen-box"><input type="checkbox" id="allergen-gluten"><img src="/images/glutenicon.png"> Gluten</label>
+      <label class="allergen-box"><input type="checkbox" id="allergen-dairy"><img src="/images/dairyicon.png"> Dairy</label>
+      <label class="allergen-box"><input type="checkbox" id="allergen-eggs"><img src="/images/eggicon.png"> Eggs</label>
+      <label class="allergen-box"><input type="checkbox" id="allergen-peanuts"><img src="/images/peanuticon.png"> Peanuts</label>
+      <label class="allergen-box"><input type="checkbox" id="allergen-soy"><img src="/images/soyicon.png"> Soy</label>
     </div>
 
-    <!-- Validate button -->
-    <button class="validate-btn" onclick="validateDish()">Create</button>
+    <button class="validate-btn" onclick="validateDish()">Create Dish</button>
   </div>
 
   <script>
+    const priceInput = document.getElementById('meal-price');
+    const priceSlider = document.getElementById('price-slider');
+
+    priceInput.addEventListener('input', () => {
+      priceSlider.value = priceInput.value;
+    });
+
+    priceSlider.addEventListener('input', () => {
+      priceInput.value = priceSlider.value;
+    });
+
     function addIngredient() {
       const ingredientInput = document.getElementById('ingredient-input');
       const ingredient = ingredientInput.value.trim();
@@ -123,36 +266,27 @@
         ingredientElem.textContent = ingredient;
         ingredientElem.className = 'ingredient-item';
         ingredientElem.title = "Click to mark as removed";
-        // Toggle the 'removed' class on click instead of deleting it
         ingredientElem.onclick = () => ingredientElem.classList.toggle('removed');
         list.appendChild(ingredientElem);
         ingredientInput.value = "";
       }
     }
-    
 
     async function validateDish() {
       const mealName = document.getElementById('meal-name').value;
       const mealType = document.getElementById('meal-type').value;
       const mealPrice = parseFloat(document.getElementById('meal-price').value);
-      
-      // After: Only include ingredients that are not marked as removed
       const ingredients = [];
       document.querySelectorAll('#ingredients-list .ingredient-item').forEach(item => {
         if (!item.classList.contains('removed')) {
           ingredients.push(item.textContent);
         }
       });
-
-
-      // Get nutrients
       const nutrients = {
         Calories: parseFloat(document.getElementById('nutrient-calories').value) || 0,
         Sugar: parseFloat(document.getElementById('nutrient-sugar').value) || 0,
         Fat: parseFloat(document.getElementById('nutrient-fat').value) || 0
       };
-
-      // Get allergens
       const allergens = {
         Gluten: document.getElementById('allergen-gluten').checked,
         Dairy: document.getElementById('allergen-dairy').checked,
@@ -160,10 +294,14 @@
         Peanuts: document.getElementById('allergen-peanuts').checked,
         Soy: document.getElementById('allergen-soy').checked
       };
-
-      const data = { meal_name: mealName, meal_price: mealPrice, meal_type: mealType, ingredients:ingredients, nutrients:nutrients, allergens:allergens };
-
-
+      const data = {
+        meal_name: mealName,
+        meal_price: mealPrice,
+        meal_type: mealType,
+        ingredients: ingredients,
+        nutrients: nutrients,
+        allergens: allergens
+      };
       try {
         const response = await fetch('/meals', {
           method: 'POST',
@@ -171,7 +309,7 @@
           body: JSON.stringify(data)
         });
         if (response.ok) {
-          window.location.href = '/manager'; // Return to Manager page
+          window.location.href = '/manager';
         } else {
           alert("Error creating dish.");
         }
