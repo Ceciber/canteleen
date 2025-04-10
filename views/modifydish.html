@@ -117,8 +117,8 @@
     .input-group {
       display: flex;
       flex-direction: column;
-      gap: 20px;
       align-items: center;
+      gap: 20px;
     }
 
     .input-field {
@@ -126,7 +126,8 @@
       font-size: 1rem;
       border: 1px solid #d1d5db;
       border-radius: 12px;
-      width: 250px;
+      width: 80%;
+      max-width: 300px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
 
@@ -262,6 +263,27 @@
       border: none;
       cursor: pointer;
     }
+
+    .input-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .price-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .euro-symbol {
+      font-size: 1.1rem;
+      color: #1e3a8a;
+      font-weight: bold;
+    }
+    
   </style>
 </head>
 <body>
@@ -304,9 +326,13 @@
               <option>Dessert</option>
             </select>
             <div class="price-field">
-              <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €" />
-              <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1" />
-            </div>
+              <div class="price-input-wrapper">
+                <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price">
+                <span class="euro-symbol">€</span>
+              </div>
+              <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1">
+            </div>            
+            
           </div>
         </div>
 
