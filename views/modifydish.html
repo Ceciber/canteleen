@@ -1,22 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modify Dish - Canteleen Manager</title>
-  <link rel="stylesheet" href="/css/managerstyle.css">
+  <link rel="stylesheet" href="/css/managerstyle.css" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f9fafb;
       margin: 0;
       padding: 0;
+      overflow-y: auto;
     }
 
-    .adddish-container {
+    .modifydish-totalcontent {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      background-color: #1e3a8a;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem 0;
+      z-index: 10;
+    }
+
+    .sidebar-top,
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      width: 100%;
+      color: white;
+      font-size: 1rem;
+      transition: background 0.3s ease-in-out;
+      text-align: left;
+    }
+
+    .sidebar button img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    .sidebar button:hover,
+    .sidebar button.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-left: 4px solid #fff;
+    }
+
+    .sidebar-bottom hr {
+      width: 80%;
+      border: 1px solid #e5e7eb;
+      margin: 1rem auto;
+    }
+
+    .modifydish-container {
+      margin-left: 200px;
+      flex-grow: 1;
       padding: 40px;
-      max-width: 800px;
-      margin: auto;
+      background-color: #f9fafb;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 40px;
     }
 
     .section {
@@ -27,17 +98,27 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     }
 
-    h2 {
-      text-align: center;
-      color: #1e3a8a;
-      margin-bottom: 40px;
+    .meal-info {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .meal-image-preview {
+      width: 180px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 16px;
+      background-color: #f1f1f1;
     }
 
     .input-group {
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 20px;
+      align-items: center;
     }
 
     .input-field {
@@ -45,8 +126,7 @@
       font-size: 1rem;
       border: 1px solid #d1d5db;
       border-radius: 12px;
-      width: 80%;
-      max-width: 300px;
+      width: 250px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
 
@@ -54,50 +134,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%;
-    }
-
-    .price-field input[type="number"] {
-      margin-bottom: 10px;
     }
 
     .price-slider {
-      width: 80%;
-      max-width: 300px;
-    }
-
-    .nutrients {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .nutrient {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .nutrient label {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-    
-
-    .nutrient input {
-      padding: 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      width: 100px;
-      text-align: center;
-    }
-
-    .nutrient span {
-      margin-top: 5px;
-      font-size: 0.9rem;
-      color: #6b7280;
+      width: 250px;
     }
 
     .ingredients-list {
@@ -109,14 +149,10 @@
 
     .ingredient-item {
       background-color: #f1f5f9;
-      color: #1e293b;
-      font-size: 0.9rem;
-      border: 1px solid #cbd5e1;
       padding: 6px 12px;
+      border: 1px solid #cbd5e1;
       border-radius: 16px;
-      position: relative;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
     .ingredient-item:hover {
@@ -126,6 +162,12 @@
     .ingredient-item.removed {
       text-decoration: line-through;
       opacity: 0.5;
+    }
+
+    .add-ingredient {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
     }
 
     .add-ingredient-btn {
@@ -138,22 +180,58 @@
       cursor: pointer;
     }
 
-    .add-ingredient {
+    .nutrients {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .nutrient-circle {
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nutrient-circle .circle-bg {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(#3b82f6 0%, #e5e7eb 0%);
+      position: relative;
+    }
+
+    .nutrient-circle .handle {
+      width: 14px;
+      height: 14px;
+      background: #3b82f6;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+    }
+
+    .nutrient-circle .percentage {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    .nutrient-circle label {
+      font-size: 0.9rem;
+      color: #6b7280;
     }
 
     .allergens {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       gap: 20px;
-      margin-top: 10px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      flex-wrap: wrap;
     }
-    
-    
 
     .allergen-box {
       display: flex;
@@ -184,256 +262,264 @@
       border: none;
       cursor: pointer;
     }
-
-    .modifydish-totalcontent {
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-      overflow: hidden;
-    }
-    
-    .sidebar {
-      width: 200px;
-      background-color: #1e3a8a;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1rem 0;
-    }
-    
-    .sidebar-top,
-    .sidebar-bottom {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .sidebar button {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: none;
-      border: none;
-      padding: 12px 20px;
-      cursor: pointer;
-      width: 100%;
-      color: white;
-      font-size: 1rem;
-      transition: background 0.3s ease-in-out;
-      text-align: left;
-    }
-    
-    .sidebar button img {
-      width: 24px;
-      height: 24px;
-      filter: brightness(0) invert(1);
-    }
-    
-    .sidebar button:hover, 
-    .sidebar button.active {
-      background-color: rgba(255, 255, 255, 0.15);
-      border-left: 4px solid #fff;
-    }
-    
-    .sidebar-bottom hr {
-      width: 80%;
-      border: 1px solid #e5e7eb;
-      margin: 1rem auto;
-    }
-    
   </style>
 </head>
 <body>
-  <div class="modifydish-totalcontent">
-    
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <button id="btn-return" onclick="window.location.href='/manager'">
-          <img src="/images/returnicon.png" alt="Return">
-          <span>Return</span>
-        </button>
-      </div>
-      <div class="sidebar-bottom">
-        <hr>
-        <button id="btn-profile" onclick="window.location.href='/manager#profile'">
-          <img src="/images/profileicon.png" alt="Profile">
-          <span>Profile</span>
-        </button>
-      </div>
-    </aside>
-    <div class="adddish-container">
-      <h2>Modify Dish</h2>
+  <!-- HTML continues... -->
 
-      <!-- Meal Info Section -->
-      <div class="section">
-        <div class="input-group">
-          <input type="text" id="meal-name" class="input-field" placeholder="Meal Name">
-          <select id="meal-type" class="input-field">
-            <option disabled selected>Select Type</option>
-            <option>Starter</option>
-            <option>Meat</option>
-            <option>Fish</option>
-            <option>Vegetarian</option>
-            <option>Dessert</option>
-          </select>
-          <div class="price-field">
-            <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €">
-            <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1">
+
+    <div class="modifydish-totalcontent">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button onclick="window.location.href='/manager'">
+            <img src="/images/returnicon.png" alt="Return" />
+            <span>Return</span>
+          </button>
+        </div>
+        <div class="sidebar-bottom">
+          <hr />
+          <button onclick="window.location.href='/manager#profile'">
+            <img src="/images/profileicon.png" alt="Profile" />
+            <span>Profile</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="modifydish-container">
+        <h2>Modify Dish</h2>
+
+        <!-- Meal Info Section -->
+        <div class="section meal-info">
+          <img id="meal-preview" class="meal-image-preview" src="" alt="Preview" />
+          <div class="input-group">
+            <input type="text" id="meal-name" class="input-field" placeholder="Meal Name" />
+            <select id="meal-type" class="input-field">
+              <option disabled selected>Select Type</option>
+              <option>Starter</option>
+              <option>Meat</option>
+              <option>Fish</option>
+              <option>Vegetarian</option>
+              <option>Dessert</option>
+            </select>
+            <div class="price-field">
+              <input type="number" id="meal-price" class="input-field" min="1" max="50" placeholder="Price €" />
+              <input type="range" id="price-slider" class="price-slider" min="1" max="50" step="1" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Ingredients Section -->
-      <div class="section">
-        <div class="ingredients-list" id="ingredients-list"></div>
-        <div class="add-ingredient">
-          <input type="text" id="ingredient-input" class="input-field" placeholder="Add Ingredient">
-          <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
+        <!-- Ingredients Section -->
+        <div class="section">
+          <div class="ingredients-list" id="ingredients-list"></div>
+          <div class="add-ingredient">
+            <input type="text" id="ingredient-input" class="input-field" placeholder="Add Ingredient" />
+            <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
+          </div>
         </div>
-      </div>
 
-      <!-- Nutrients Section -->
-      <div class="section nutrients">
-        <div class="nutrient">
-          <label for="nutrient-calories">Calories</label>
-          <input type="number" id="nutrient-calories" placeholder="0">
-          <span>kcal</span>
+        <!-- Nutrients Section -->
+        <div class="section nutrients">
+          <div class="nutrient-circle" id="calories-slider">
+            <div class="circle-bg">
+              <div class="handle"></div>
+            </div>
+            <div class="percentage">0%</div>
+            <label>Calories</label>
+          </div>
+          <div class="nutrient-circle" id="sugar-slider">
+            <div class="circle-bg">
+              <div class="handle"></div>
+            </div>
+            <div class="percentage">0%</div>
+            <label>Sugar</label>
+          </div>
+          <div class="nutrient-circle" id="fat-slider">
+            <div class="circle-bg">
+              <div class="handle"></div>
+            </div>
+            <div class="percentage">0%</div>
+            <label>Fat</label>
+          </div>
         </div>
-        <div class="nutrient">
-          <label for="nutrient-sugar">Sugar</label>
-          <input type="number" id="nutrient-sugar" placeholder="0">
-          <span>g</span>
-        </div>
-        <div class="nutrient">
-          <label for="nutrient-sugar">Fat</label>
-          <input type="number" id="nutrient-fat" placeholder="0">
-          <span>g</span>
-        </div>
-      </div>
 
-      <!-- Allergens Section -->
-      <div class="section allergens">
-        <label class="allergen-box"><input type="checkbox" id="allergen-gluten"><img src="/images/glutenicon.png"> Gluten</label>
-        <label class="allergen-box"><input type="checkbox" id="allergen-dairy"><img src="/images/dairyicon.png"> Dairy</label>
-        <label class="allergen-box"><input type="checkbox" id="allergen-eggs"><img src="/images/eggicon.png"> Eggs</label>
-        <label class="allergen-box"><input type="checkbox" id="allergen-peanuts"><img src="/images/peanuticon.png"> Peanuts</label>
-        <label class="allergen-box"><input type="checkbox" id="allergen-soy"><img src="/images/soyicon.png"> Soy</label>
-      </div>
+        <!-- Allergens -->
+        <div class="section allergens">
+          <label class="allergen-box"><input type="checkbox" id="allergen-gluten"><img src="/images/glutenicon.png"> Gluten</label>
+          <label class="allergen-box"><input type="checkbox" id="allergen-dairy"><img src="/images/dairyicon.png"> Dairy</label>
+          <label class="allergen-box"><input type="checkbox" id="allergen-eggs"><img src="/images/eggicon.png"> Eggs</label>
+          <label class="allergen-box"><input type="checkbox" id="allergen-peanuts"><img src="/images/peanuticon.png"> Peanuts</label>
+          <label class="allergen-box"><input type="checkbox" id="allergen-soy"><img src="/images/soyicon.png"> Soy</label>
+        </div>
 
-      <button class="validate-btn" onclick="validateModification()">Validate</button>
+        <button class="validate-btn" onclick="validateModification()">Validate</button>
+      </div>
     </div>
-  </div>
 
-
-  <script>
-    const priceInput = document.getElementById('meal-price');
-    const priceSlider = document.getElementById('price-slider');
-
-    priceInput.addEventListener('input', () => {
-      priceSlider.value = priceInput.value;
-    });
-
-    priceSlider.addEventListener('input', () => {
-      priceInput.value = priceSlider.value;
-    });
-
-    function addIngredient() {
-      const ingredientInput = document.getElementById('ingredient-input');
-      const ingredient = ingredientInput.value.trim();
-      if (ingredient !== "") {
-        const list = document.getElementById('ingredients-list');
-        const ingredientElem = document.createElement('div');
-        ingredientElem.textContent = ingredient;
-        ingredientElem.className = 'ingredient-item';
-        ingredientElem.title = "Click to mark as removed";
-        ingredientElem.onclick = () => ingredientElem.classList.toggle('removed');
-        list.appendChild(ingredientElem);
-        ingredientInput.value = "";
+    <script>
+      const preview = document.getElementById('meal-preview');
+      const mealTypeInput = document.getElementById('meal-type');
+      mealTypeInput.addEventListener('change', updateImagePreview);
+      function updateImagePreview() {
+        const val = mealTypeInput.value.toLowerCase();
+        const base = '/images/';
+        const map = {
+          starter: 'menu-starters.jpg',
+          meat: 'menu-meat.jpg',
+          fish: 'menu-fish.jpg',
+          vegetarian: 'menu-vegetarian.jpg',
+          dessert: 'menu-dessert.jpg'
+        };
+        preview.src = map[val] ? base + map[val] : '';
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mealId = urlParams.get('id');
-      if (!mealId) return alert("No meal ID provided.");
+      function addIngredient() {
+        const input = document.getElementById('ingredient-input');
+        const val = input.value.trim();
+        if (val) {
+          const div = document.createElement('div');
+          div.className = 'ingredient-item';
+          div.textContent = val;
+          div.onclick = () => div.classList.toggle('removed');
+          document.getElementById('ingredients-list').appendChild(div);
+          input.value = '';
+        }
+      }
 
-      try {
-        const response = await fetch(`/meals/${mealId}`);
-        if (!response.ok) return alert("Failed to load meal data.");
+      function setupCircularNutrient(id) {
+        const container = document.getElementById(id);
+        const circle = container.querySelector(".circle-bg");
+        const handle = container.querySelector(".handle");
+        const percentText = container.querySelector(".percentage");
+        const radius = 60;
 
-        const meal = await response.json();
+        function updateFromAngle(angle) {
+          const percent = Math.round(angle / 360 * 100);
+          circle.style.background = `conic-gradient(#3b82f6 0% ${percent}%, #e5e7eb ${percent}% 100%)`;
+          percentText.textContent = percent + "%";
+          container.setAttribute("data-percent", percent);
+
+          const rad = angle * Math.PI / 180;
+          const x = radius + Math.cos(rad - Math.PI / 2) * (radius - 10);
+          const y = radius + Math.sin(rad - Math.PI / 2) * (radius - 10);
+          handle.style.left = x + "px";
+          handle.style.top = y + "px";
+        }
+
+        function getAngle(e) {
+          const rect = container.getBoundingClientRect();
+          const x = (e.clientX || e.touches[0].clientX) - rect.left - radius;
+          const y = (e.clientY || e.touches[0].clientY) - rect.top - radius;
+          let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+          if (angle < 0) angle += 360;
+          return angle;
+        }
+
+        function onMove(e) {
+          e.preventDefault();
+          updateFromAngle(getAngle(e));
+        }
+
+        function startDrag(e) {
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("touchmove", onMove, { passive: false });
+          document.addEventListener("mouseup", stopDrag);
+          document.addEventListener("touchend", stopDrag);
+          onMove(e);
+        }
+
+        function stopDrag() {
+          document.removeEventListener("mousemove", onMove);
+          document.removeEventListener("touchmove", onMove);
+          document.removeEventListener("mouseup", stopDrag);
+          document.removeEventListener("touchend", stopDrag);
+        }
+
+        handle.addEventListener("mousedown", startDrag);
+        handle.addEventListener("touchstart", startDrag, { passive: false });
+        updateFromAngle(180);
+      }
+
+      setupCircularNutrient("calories-slider");
+      setupCircularNutrient("sugar-slider");
+      setupCircularNutrient("fat-slider");
+
+      document.getElementById("price-slider").addEventListener("input", e => {
+        document.getElementById("meal-price").value = e.target.value;
+      });
+      document.getElementById("meal-price").addEventListener("input", e => {
+        document.getElementById("price-slider").value = e.target.value;
+      });
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const id = new URLSearchParams(window.location.search).get("id");
+        if (!id) return alert("No meal ID provided.");
+        const res = await fetch(`/meals/${id}`);
+        if (!res.ok) return alert("Failed to load meal.");
+        const meal = await res.json();
+
         document.getElementById('meal-name').value = meal.meal_name;
         document.getElementById('meal-type').value = meal.meal_type;
         document.getElementById('meal-price').value = meal.meal_price;
-        priceSlider.value = meal.meal_price;
+        document.getElementById('price-slider').value = meal.meal_price;
+        updateImagePreview();
 
-        const list = document.getElementById('ingredients-list');
-        meal.ingredients.forEach(ing => {
+        meal.ingredients.forEach(i => {
           const div = document.createElement('div');
-          div.textContent = ing;
           div.className = 'ingredient-item';
+          div.textContent = i;
           div.onclick = () => div.classList.toggle('removed');
-          list.appendChild(div);
+          document.getElementById('ingredients-list').appendChild(div);
         });
 
-        document.getElementById('nutrient-calories').value = meal.nutrients.Calories;
-        document.getElementById('nutrient-sugar').value = meal.nutrients.Sugar;
-        document.getElementById('nutrient-fat').value = meal.nutrients.Fat;
+        document.getElementById("calories-slider").setAttribute("data-percent", meal.nutrients.Calories);
+        document.getElementById("sugar-slider").setAttribute("data-percent", meal.nutrients.Sugar);
+        document.getElementById("fat-slider").setAttribute("data-percent", meal.nutrients.Fat);
+        setupCircularNutrient("calories-slider");
+        setupCircularNutrient("sugar-slider");
+        setupCircularNutrient("fat-slider");
 
         document.getElementById('allergen-gluten').checked = meal.allergens.Gluten;
         document.getElementById('allergen-dairy').checked = meal.allergens.Dairy;
         document.getElementById('allergen-eggs').checked = meal.allergens.Eggs;
         document.getElementById('allergen-peanuts').checked = meal.allergens.Peanuts;
         document.getElementById('allergen-soy').checked = meal.allergens.Soy;
-      } catch (err) {
-        console.error(err);
-        alert("Error loading meal data.");
-      }
-    });
-
-    async function validateModification() {
-      const mealId = new URLSearchParams(window.location.search).get('id');
-      const mealName = document.getElementById('meal-name').value;
-      const mealType = document.getElementById('meal-type').value;
-      const mealPrice = parseFloat(document.getElementById('meal-price').value);
-
-      const ingredients = [];
-      document.querySelectorAll('#ingredients-list .ingredient-item').forEach(item => {
-        if (!item.classList.contains('removed')) ingredients.push(item.textContent);
       });
 
-      const nutrients = {
-        Calories: parseFloat(document.getElementById('nutrient-calories').value) || 0,
-        Sugar: parseFloat(document.getElementById('nutrient-sugar').value) || 0,
-        Fat: parseFloat(document.getElementById('nutrient-fat').value) || 0
-      };
+      async function validateModification() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        const data = {
+          meal_name: document.getElementById("meal-name").value,
+          meal_type: document.getElementById("meal-type").value,
+          meal_price: parseFloat(document.getElementById("meal-price").value),
+          ingredients: Array.from(document.querySelectorAll(".ingredient-item:not(.removed)")).map(i => i.textContent),
+          nutrients: {
+            Calories: parseInt(document.getElementById("calories-slider").getAttribute("data-percent")) || 0,
+            Sugar: parseInt(document.getElementById("sugar-slider").getAttribute("data-percent")) || 0,
+            Fat: parseInt(document.getElementById("fat-slider").getAttribute("data-percent")) || 0
+          },
+          allergens: {
+            Gluten: document.getElementById("allergen-gluten").checked,
+            Dairy: document.getElementById("allergen-dairy").checked,
+            Eggs: document.getElementById("allergen-eggs").checked,
+            Peanuts: document.getElementById("allergen-peanuts").checked,
+            Soy: document.getElementById("allergen-soy").checked
+          }
+        };
 
-      const allergens = {
-        Gluten: document.getElementById('allergen-gluten').checked,
-        Dairy: document.getElementById('allergen-dairy').checked,
-        Eggs: document.getElementById('allergen-eggs').checked,
-        Peanuts: document.getElementById('allergen-peanuts').checked,
-        Soy: document.getElementById('allergen-soy').checked
-      };
-
-      const data = { meal_name: mealName, meal_type: mealType, meal_price: mealPrice, ingredients, nutrients, allergens };
-
-      try {
-        const response = await fetch(`/meals/${mealId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch(`/meals/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
-        if (response.ok) {
-          window.location.href = '/manager';
+
+        if (res.ok) {
+          window.location.href = "/manager";
         } else {
-          alert("Error updating meal.");
+          alert("Failed to update meal.");
         }
-      } catch (error) {
-        console.error(error);
-        alert("Error updating meal.");
       }
-    }
-  </script>
-</body>
-</html>
+    </script>
+    </body>
+    </html>

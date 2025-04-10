@@ -270,7 +270,47 @@
       align-items: center;
       box-sizing: border-box;
     }
+
+    .nutrient-circle {
+      width: 120px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
     
+    .nutrient-circle .circle-bg {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(#3b82f6 0%, #e5e7eb 0%);
+      position: relative;
+    }
+    
+    .nutrient-circle .handle {
+      width: 14px;
+      height: 14px;
+      background: #3b82f6;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    }
+    
+    .nutrient-circle .percentage {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #374151;
+    }
+    
+    .nutrient-circle label {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
     
     
     
@@ -301,7 +341,11 @@
 
 
       <!-- Meal Info Section -->
-      <div class="section">
+      <div class="section" style="display: flex; gap: 40px; justify-content: center; align-items: center; flex-wrap: wrap;">
+        <!-- Image preview on the left -->
+        <div id="meal-image-preview" style="width: 200px; height: 200px; border-radius: 16px; background-color: #f1f5f9; background-size: cover; background-position: center;"></div>
+      
+        <!-- Inputs on the right -->
         <div class="input-group">
           <input type="text" id="meal-name" class="input-field" placeholder="Meal Name">
           <select id="meal-type" class="input-field">
@@ -318,6 +362,7 @@
           </div>
         </div>
       </div>
+      
 
       <!-- Ingredients Section -->
       <div class="section">
@@ -327,25 +372,34 @@
           <button class="add-ingredient-btn" onclick="addIngredient()">Add Ingredient</button>
         </div>
       </div>
+      
 
       <!-- Nutrients Section -->
-      <div class="section nutrients">
-        <div class="nutrient">
-          <label for="nutrient-calories">Calories</label>
-          <input type="number" id="nutrient-calories" placeholder="0">
-          <span>%</span>
+      <div class="section nutrients" style="justify-content: center; gap: 40px;">
+        <div class="nutrient-circle" id="calories-slider">
+          <div class="circle-bg">
+            <div class="handle"></div>
+          </div>
+          <div class="percentage">0%</div>
+          <label>Calories</label>
         </div>
-        <div class="nutrient">
-          <label for="nutrient-sugar">Sugar</label>
-          <input type="number" id="nutrient-sugar" placeholder="0">
-          <span>%</span>
+        <div class="nutrient-circle" id="sugar-slider">
+          <div class="circle-bg">
+            <div class="handle"></div>
+          </div>
+          <div class="percentage">0%</div>
+          <label>Sugar</label>
         </div>
-        <div class="nutrient">
-          <label for="nutrient-sugar">Fat</label>
-          <input type="number" id="nutrient-fat" placeholder="0">
-          <span>%</span>
+        <div class="nutrient-circle" id="fat-slider">
+          <div class="circle-bg">
+            <div class="handle"></div>
+          </div>
+          <div class="percentage">0%</div>
+          <label>Fat</label>
         </div>
-    </div>
+      </div>
+
+
 
     <!-- Allergens Section -->
     <div class="section allergens">
@@ -371,6 +425,34 @@
     priceSlider.addEventListener('input', () => {
       priceInput.value = priceSlider.value;
     });
+
+    const mealTypeSelect = document.getElementById('meal-type');
+    const mealImagePreview = document.getElementById('meal-image-preview');
+
+    mealTypeSelect.addEventListener('change', () => {
+      const type = mealTypeSelect.value.toLowerCase();
+      const validTypes = ["starter", "meat", "fish", "vegetarian", "dessert"];
+      if (validTypes.includes(type)) {
+        const typeToImage = {
+          starter: "menu-starters.jpg",
+          meat: "menu-meat.jpg",
+          fish: "menu-fish.jpg",
+          vegetarian: "menu-vegeterian.jpg",  // ✅ Check your actual file spelling
+          dessert: "menu-dessert.jpg"
+        };
+        
+        const mealType = mealTypeSelect.value.toLowerCase();
+        if (typeToImage[mealType]) {
+          mealImagePreview.style.backgroundImage = `url('/images/${typeToImage[mealType]}')`;
+        } else {
+          mealImagePreview.style.backgroundImage = '';
+        }
+        
+      } else {
+        mealImagePreview.style.backgroundImage = '';
+      }
+    });
+
 
     function addIngredient() {
       const ingredientInput = document.getElementById('ingredient-input');
@@ -398,10 +480,11 @@
         }
       });
       const nutrients = {
-        Calories: parseFloat(document.getElementById('nutrient-calories').value) || 0,
-        Sugar: parseFloat(document.getElementById('nutrient-sugar').value) || 0,
-        Fat: parseFloat(document.getElementById('nutrient-fat').value) || 0
+        Calories: parseInt(document.getElementById('calories-slider').getAttribute("data-percent")) || 0,
+        Sugar: parseInt(document.getElementById('sugar-slider').getAttribute("data-percent")) || 0,
+        Fat: parseInt(document.getElementById('fat-slider').getAttribute("data-percent")) || 0
       };
+
       const allergens = {
         Gluten: document.getElementById('allergen-gluten').checked,
         Dairy: document.getElementById('allergen-dairy').checked,
@@ -433,6 +516,66 @@
         alert("Error when creating dish");
       }
     }
+
+    function setupCircularNutrient(containerId) {
+      const container = document.getElementById(containerId);
+      const circle = container.querySelector(".circle-bg");
+      const handle = container.querySelector(".handle");
+      const percentText = container.querySelector(".percentage");
+      const radius = container.offsetWidth / 2;
+    
+      function updateFromAngle(angle) {
+        const percent = Math.round(angle / 360 * 100);
+        circle.style.background = `conic-gradient(#3b82f6 0% ${percent}%, #e5e7eb ${percent}% 100%)`;
+        percentText.textContent = percent + "%";
+        container.setAttribute("data-percent", percent);
+    
+        const rad = angle * Math.PI / 180;
+        const x = radius + Math.cos(rad - Math.PI / 2) * (radius - 10);
+        const y = radius + Math.sin(rad - Math.PI / 2) * (radius - 10);
+        handle.style.left = x + "px";
+        handle.style.top = y + "px";
+      }
+    
+      function getAngle(e) {
+        const rect = container.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left - radius;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top - radius;
+        let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+        if (angle < 0) angle += 360;
+        return angle;
+      }
+    
+      function onMove(e) {
+        e.preventDefault();
+        updateFromAngle(getAngle(e));
+      }
+    
+      function startDrag(e) {
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("touchmove", onMove, { passive: false });
+        document.addEventListener("mouseup", stopDrag);
+        document.addEventListener("touchend", stopDrag);
+        onMove(e);
+      }
+    
+      function stopDrag() {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("touchmove", onMove);
+        document.removeEventListener("mouseup", stopDrag);
+        document.removeEventListener("touchend", stopDrag);
+      }
+    
+      handle.addEventListener("mousedown", startDrag);
+      handle.addEventListener("touchstart", startDrag, { passive: false });
+    
+      updateFromAngle(180); // default 50%
+    }
+    
+    setupCircularNutrient("calories-slider");
+    setupCircularNutrient("sugar-slider");
+    setupCircularNutrient("fat-slider");
+    
   </script>
 </body>
 </html>
