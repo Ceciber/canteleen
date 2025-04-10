@@ -11,12 +11,8 @@
       background-color: #f9fafb;
       margin: 0;
       padding: 0;
-    }
-
-    .adddish-container {
-      padding: 40px;
-      max-width: 800px;
-      margin: auto;
+      overflow-y: auto;           
+      height: auto;
     }
 
     .section {
@@ -150,7 +146,6 @@
       gap: 20px;
       margin-top: 10px;
       flex-wrap: nowrap;
-      overflow-x: auto;
     }
     
     
@@ -192,19 +187,25 @@
 
     .adddish-totalcontent {
       display: flex;
-      flex-direction: row;
       height: 100vh;
       overflow: hidden;
     }
-
+    
+    
     .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
       width: 200px;
       background-color: #1e3a8a;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       padding: 1rem 0;
+      z-index: 10;
     }
+    
     
     .sidebar-top,
     .sidebar-bottom {
@@ -256,12 +257,22 @@
       filter: brightness(0) invert(1);
     }
     
+
     .adddish-container {
-      flex: 1;
+      margin-left: 200px; /* same as sidebar */
       padding: 40px;
-      overflow-y: auto;
       background-color: #f9fafb;
+      flex-grow: 1;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
     }
+    
+    
+    
     
     
   </style>
@@ -322,17 +333,17 @@
         <div class="nutrient">
           <label for="nutrient-calories">Calories</label>
           <input type="number" id="nutrient-calories" placeholder="0">
-          <span>kcal</span>
+          <span>%</span>
         </div>
         <div class="nutrient">
           <label for="nutrient-sugar">Sugar</label>
           <input type="number" id="nutrient-sugar" placeholder="0">
-          <span>g</span>
+          <span>%</span>
         </div>
         <div class="nutrient">
           <label for="nutrient-sugar">Fat</label>
           <input type="number" id="nutrient-fat" placeholder="0">
-          <span>g</span>
+          <span>%</span>
         </div>
     </div>
 
