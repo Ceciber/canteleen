@@ -119,7 +119,7 @@ Accessible after logging in as a **Manager**.
 To run locally:
 
 ```bash
-git clone https://github.com/yourusername/canteleen.git
+git clone https://github.com/Ceciber/canteleen.git
 cd canteleen
 npm install
 npm start
