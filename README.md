@@ -60,8 +60,19 @@ For testing purposes, two system accounts are pre-configured:
 - **Cashier**  
   - Username: `Cashier`  
   - Password: `cashierpassword`
+
+Upon successful login, the user is redirected to their respective dashboard. Sessions are tracked using server-side sessions to ensure data consistency.
+
 ---
-The corresponding interface after signing in depends on the role of the user. Howewer, regardless of the role, each user will always have the option to modify their profile when clicking on the icon "Profile"
+The corresponding interface after signing in depends on the role of the user. Howewer, regardless of the role, each user will always have the option to modify their profile when clicking on the icon "Profile".
+
+The profile section includes:
+- Editable personal fields: full name, username, email, gender, country, and language (default English)
+- Role information and profile image
+- A button to erase the account
+- The possibility to save updated information back to the database
+
+---
 
 ## 💼 Role-Based Functionality
 
@@ -69,40 +80,87 @@ The corresponding interface after signing in depends on the role of the user. Ho
 
 Accessible after logging in as a **Cashier**.
 
-- Select the **guest type** (student, teacher, visitor, other), which applies a discount.
-- Add items to a guest’s order from the available daily menu.
-- Manage and adjust the order before checkout.
-- Simulate payment using:
-  - 💳 Credit card
-  - 💰 Cash
-  - 🎫 Balance (linked to a mock client card)
-- Recharge client balance via card ID.
-- Orders are saved with:
-  - Client name and ID
-  - Items purchased
-  - Total amount, tax, and discount
-  - Cashier username
-  - Payment method
-  - Timestamp
+- 🧍 **Guest Selection**  
+  Choose the type of guest (student, teacher, staff, or other). This choice is used to determine the applicable discount for the order.
+
+- 🧮 **Order Management**  
+  - Search and filter dishes by category (Meat, Fish, Vegetarian, Dessert, etc.).
+  - Add items from the active daily menu to an ongoing order.
+  - Visual right-hand sidebar showing:
+    - Selected guest type
+    - Items in current order (quantity control, remove button)
+    - Breakdown of total, taxes, discount, and final amount
+    - Proceed to payment button
+
+- 💳 **Payment Simulation**  
+  - Simulates card swipe by randomly selecting a mock user from a client database.
+  - Displays user name, card number, and balance
+  - Offers 3 payment options:
+    - Cash
+    - Credit Card
+    - Balance (disabled during recharge flow)
+  - Recharge flow with a conditional input field (when recharge is clicked)
+  - After payment:
+    - Saves order in the database (with items, payment method, and card ID)
+    - Clears the current order and resets the interface
+
+Orders include:
+- Card ID
+- List of meals (with all properties: price, type, nutrients, allergens, etc.)
+- Quantity per meal
+- Payment method
+- Timestamp (recorded at the time of payment)
+
+---
 
 ### 🧑‍🍳 Manager Interface
 
 Accessible after logging in as a **Manager**.
 
-- **Manage Dishes**:
-  - Add, edit, and remove meals in the database.
-  - Set nutrients, ingredients, dish type, allergens, and price.
-  
-- **Create Menu of the Day**:
-  - Choose which dishes are visible on the public menu screen.
+#### 🧾 Menu Management
+- Add new meals with:
+  - Name, price, ingredients
+  - Nutrients: calories, sugar, fat
+  - Allergens (gluten, dairy, eggs, peanuts, soy)
+  - Meal type (Meat, Fish, Vegetarian, Dessert)
+- Modify or delete existing meals
+- Copy meals to duplicate their data quickly
+- Filter the meal list by type or view **"Menu of the Day"**
+- Toggle **Add to Menu** and **Remove from Menu** (only one dish per type can be selected for the menu)
+- Menu updates immediately reflect on the Guest public display
 
-- **View Orders**:
-  - See a list of all previous orders.
-  - Filter orders by date.
-  - Visualize each order’s details: client, cashier, payment time, and items.
+#### 📊 Order Monitoring
 
-- **Update Dish Display Screens**:
-  - Automatically reflects the latest dish information in the public "Info Screens".
+- **Summary Section** (top panel):
+  - Total Income
+  - Total Orders
+  - Meals ordered per type (Meat, Fish, Vegetarian, Dessert)
+
+- **Order Table and Detail View** (bottom panel):
+  - Table with: Order ID, number of items, total amount, Card ID
+  - Filter by date
+  - Click on any order to view detailed info in the sidebar:
+    - Tabs for **Order** (list of meals by course type) and **Payment** (method used)
+
+---
+
+## 🗃️ Data Model
+
+### Database contains 3 main tables:
+
+- **Users**
+  - Full name, username, gender, country, language, email, password, role
+
+- **Meals**
+  - Name, price, ingredients (list), nutrients (dict), allergens (dict), type, inMenu (boolean)
+
+- **Orders**
+  - Order ID, Card ID, Items (list of meal objects + quantity), Payment method, Timestamp
+
+An additional **Clients** table holds mock clients (students, staff, teachers, visitors) with:
+- Name
+- Card Number
+- Balance
 
 ---
 
@@ -111,6 +169,7 @@ Accessible after logging in as a **Manager**.
 - **Frontend**: HTML, CSS, JavaScript
 - **Backend**: Node.js (Express)
 - **Database**: SQLite / JSON-based mock storage (depending on deployment)
+- **Session Management**: express-session
 
 ---
 
