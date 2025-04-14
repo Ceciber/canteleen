@@ -60,9 +60,8 @@ For testing purposes, two system accounts are pre-configured:
 - **Cashier**  
   - Username: `Cashier`  
   - Password: `cashierpassword`
-
-The corresponding interface after signing in depends on the role of the user. Howewer, regardless of the role, each user will always have the option to modify their profile when clicking on the icon "Profile".
 ---
+The corresponding interface after signing in depends on the role of the user. Howewer, regardless of the role, each user will always have the option to modify their profile when clicking on the icon "Profile"
 
 ## 💼 Role-Based Functionality
 
