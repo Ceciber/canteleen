@@ -76,6 +76,7 @@
       </section>
 
       <script>
+        let currentCategory = 'All'; // Default tab
         async function loadMeals() {
           try {
             const response = await fetch('/meals');
@@ -131,19 +132,40 @@
 
               const addToMenuBtn = document.createElement('button');
               addToMenuBtn.textContent = 'Add to Menu';
-              addToMenuBtn.onclick = async () => {
-                const res = await fetch(`/meals/${meal.id}/menu/add`, { method: 'POST' });
-                if (res.ok) loadMeals();
-                else alert("Error adding meal to menu");
-              };
-              
+              if (meal.inMenu) {
+                addToMenuBtn.disabled = true;
+                addToMenuBtn.classList.add('disabled-btn');
+              } else {
+                addToMenuBtn.onclick = async () => {
+                  const res = await fetch(`/meals/${meal.id}/menu/add`, { method: 'POST' });
+                  if (res.ok)
+                  {
+                    await loadMeals();
+                    filterMeals(currentCategory); // 👈 Stay on the same tab
+
+                  }
+                  else alert("Error adding meal to menu");
+                };
+              }
+
               const removeFromMenuBtn = document.createElement('button');
               removeFromMenuBtn.textContent = 'Remove from Menu';
-              removeFromMenuBtn.onclick = async () => {
-                const res = await fetch(`/meals/${meal.id}/menu/remove`, { method: 'POST' });
-                if (res.ok) loadMeals();
-                else alert("Error removing meal from menu");
-              };
+              if (!meal.inMenu) {
+                removeFromMenuBtn.disabled = true;
+                removeFromMenuBtn.classList.add('disabled-btn');
+              } else {
+                removeFromMenuBtn.onclick = async () => {
+                  const res = await fetch(`/meals/${meal.id}/menu/remove`, { method: 'POST' });
+                  if (res.ok)
+                  {
+                    await loadMeals();
+                    filterMeals(currentCategory); // 👈 Stay on the same tab
+
+                  }
+                  else alert("Error removing meal from menu");
+                };
+              }
+
 
               menuActions.append(addToMenuBtn, removeFromMenuBtn);
               tile.appendChild(menuActions);
@@ -156,7 +178,12 @@
               copyBtn.textContent = 'Copy';
               copyBtn.onclick = async () => {
                 const res = await fetch(`/meals/${meal.id}/copy`, { method: 'POST' });
-                if (res.ok) loadMeals();
+                if (res.ok)
+                {
+                  await loadMeals();
+                  filterMeals(currentCategory); // 👈 Stay on the same tab
+
+                }
                 else alert("Error copying meal");
               };
 
@@ -171,7 +198,11 @@
               deleteBtn.className = 'delete-btn';
               deleteBtn.onclick = async () => {
                 const res = await fetch(`/meals/${meal.id}`, { method: 'DELETE' });
-                if (res.ok) loadMeals();
+                if (res.ok) 
+                {
+                  await loadMeals();
+                  filterMeals(currentCategory); // 👈 Stay on the same tab
+                }
                 else alert("Error deleting meal");
               };
 
@@ -190,13 +221,26 @@
         
 
         function filterMeals(category) {
+          currentCategory = category;
+        
+          // Highlight the selected tab
+          document.querySelectorAll('.category-tab').forEach(btn => {
+            const spanText = btn.querySelector('span')?.textContent;
+            if (spanText === category) {
+              btn.classList.add('active-tab');
+            } else {
+              btn.classList.remove('active-tab');
+            }
+          });
+        
+          // Show/hide tiles
           const tiles = document.querySelectorAll('.meal-tile');
           tiles.forEach(tile => {
-            const inMenu = tile.getAttribute('data-inmenu');  // Fetch the inMenu value
+            const inMenu = tile.getAttribute('data-inmenu');
             const type = tile.getAttribute('data-meal-type');
-            
+        
             if (category === 'Menu') {
-              tile.style.display = inMenu === "true" ? 'block' : 'none';  // Only show if inMenu=true
+              tile.style.display = inMenu === "true" ? 'block' : 'none';
             } else if (category === 'All') {
               tile.style.display = 'block';
             } else {
@@ -204,6 +248,8 @@
             }
           });
         }
+        
+        
         
         
 
@@ -221,6 +267,8 @@
 
         document.addEventListener("DOMContentLoaded", () => {
           loadMeals();
+          filterMeals(currentCategory); // 👈 Stay on the same tab
+
           setupSearchBar(); // 👈 Add this line
         });
         

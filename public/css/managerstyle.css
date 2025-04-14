@@ -926,3 +926,13 @@ table.orders-summary td {
   align-items: center;
   gap: 12px;
 }
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.category-tab.active-tab {
+  background-color: #e0f0ff;
+  font-weight: bold;
+  border-bottom: 3px solid #007BFF;
+}
