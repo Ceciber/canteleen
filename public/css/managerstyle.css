@@ -481,7 +481,7 @@ table.orders-summary td {
 
 .order-details-sidebar {
   width: 320px;
-  background: linear-gradient(135deg, #435677, #60a5fa, #bfdbfe);
+  background: linear-gradient(to bottom, #1e3a8a, #3b82f6);
   border-left: 4px solid #1e40af;
   display: flex;
   flex-direction: column;
@@ -925,4 +925,14 @@ table.orders-summary td {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.category-tab.active-tab {
+  background-color: #e0f0ff;
+  font-weight: bold;
+  border-bottom: 3px solid #007BFF;
 }
