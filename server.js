@@ -431,15 +431,21 @@ app.get('/clients/by-role', (req, res) => {
 app.post('/clients/recharge', (req, res) => {
   const { card_id, amount } = req.body;
   const db = new sqlite3.Database(dbPath);
+  let balance = 0;
+
   db.get("SELECT balance FROM clients WHERE card_id = ?", [card_id], (err, row) => {
     if (err || !row) return res.status(404).json({ error: "Client not found" });
-    const newBalance = parseFloat(row.balance) + parseFloat(amount);
+    if (row.balance !== null) {
+      balance = row.balance;
+    }
+    const newBalance = parseFloat(balance) + parseFloat(amount);
     db.run("UPDATE clients SET balance = ? WHERE card_id = ?", [newBalance, card_id], function(err) {
       db.close();
       if (err) return res.status(500).json({ error: err.message });
       res.json({ newBalance });
     });
   });
+
 });
 
 

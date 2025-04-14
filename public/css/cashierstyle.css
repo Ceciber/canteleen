@@ -737,7 +737,7 @@ body {
 }
 
 /* Styling for Recharge and Save Buttons */
-.recharge-btn, .save-recharge-btn {
+.recharge-btn, .save-recharge-btn, #next-order-btn {
   padding: 8px 14px;
   font-size: 1rem;
   background-color: #1e3a8a;
@@ -766,12 +766,16 @@ body {
   display: none;
 }
 
-.payment-selection-title {
+.payment-selection-title, .next-order-message {
   font-size: 1.4rem;
   font-weight: bold;
   text-align: center;
   color: #1e3a8a;
   margin-bottom: 30px;
+}
+
+.next-order-message {
+  margin-bottom: 10px;
 }
 
 /* Payment Methods Section */
@@ -868,4 +872,10 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1001;
+}
+
+#confirmation {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
