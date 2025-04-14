@@ -49,7 +49,7 @@ These screens **automatically update** based on what the manager has configured.
 
 ## 🔐 Authentication
 
-Users can **log in or sign up**. When signing up, users choose their role: **Manager** or **Cashier**.
+Users can **log in or sign up** by clicking on the buttons corresponding to these actions on the homescreen. When signing up, users choose their role: **Manager** or **Cashier**.
 
 For testing purposes, two system accounts are pre-configured:
 
@@ -60,8 +60,8 @@ For testing purposes, two system accounts are pre-configured:
 - **Cashier**  
   - Username: `Cashier`  
   - Password: `cashierpassword`
-
 ---
+The corresponding interface after signing in depends on the role of the user. Howewer, regardless of the role, each user will always have the option to modify their profile when clicking on the icon "Profile"
 
 ## 💼 Role-Based Functionality
 
@@ -119,7 +119,7 @@ Accessible after logging in as a **Manager**.
 To run locally:
 
 ```bash
-git clone https://github.com/yourusername/canteleen.git
+git clone https://github.com/Ceciber/canteleen.git
 cd canteleen
 npm install
 npm start

@@ -299,11 +299,9 @@ flex-direction: column;
   }
   
   
-  
 
   .meal-tile:hover {
     transform: translateY(-4px);
-    box-shadow: 0 0 12px 4px rgba(59, 130, 246, 0.3);
   }
 
   .meal-image {
@@ -349,19 +347,15 @@ flex-direction: column;
   
   .meal-actions button {
     flex: 1;
-    padding: 10px 14px;
+    padding: 6px 8px;
     font-size: 0.85rem;
-    font-weight: bold;
     background-color: #1e3a8a;
     color: white;
     border: none;
-    border-radius: 8px; /* ⬅️ Less rounded */
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
   }
-  
-  
   
   .meal-actions button:hover {
     background-color: #2563eb;
