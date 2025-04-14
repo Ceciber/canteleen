@@ -39,19 +39,6 @@
       display: flex;
     }
 
-    /*.arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 2rem;
-      background-color: rgba(0, 0, 0, 0.2);
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      z-index: 1;
-      border-radius: 8px;
-    } */
 
     .arrow.left {
       left: 10px;
@@ -66,7 +53,7 @@
     border: 2px solid #1e3a8a;
     border-radius: 12px;
     width: 90%;
-    max-width: 400px; /* reduced */
+    max-width: 500px; /* reduced */
     padding: 16px;
     display: flex;
     flex-direction: column;

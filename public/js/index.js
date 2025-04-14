@@ -205,6 +205,28 @@ function initCarousel(sectionClass) {
 }
 
 
+function orderMenu() {
+  const container = document.querySelector('.simulated-menu-screen');
+  console.log(container);
+
+  // Get only direct div children
+  const divChildren = Array.from(container.children).filter(child => child.tagName === 'DIV');
+
+  const customOrder = ['menu_Starter', 'menu_Fish', 'menu_Meat', 'menu_Vegetarian', 'menu_Dessert'];
+
+  // Sort by class name
+  divChildren.sort((a, b) => {
+    const aIndex = customOrder.indexOf(a.id);
+    const bIndex = customOrder.indexOf(b.id);
+    return aIndex - bIndex;
+  });
+
+  // Append sorted divs at the end (moves them, doesn't duplicate)
+  divChildren.forEach(div => {
+    container.appendChild(div);
+  });
+}
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const response = await fetch('/meals');
@@ -219,6 +241,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     addToMenu(meal);
     addToScreen(meal);
   }
+
+  orderMenu();
 
   const first_carousel = screenContainer.firstElementChild;
   first_carousel.className = "slider-item active";
