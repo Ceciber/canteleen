@@ -354,20 +354,6 @@ function logout() {
 }
 
 
-function toggleRecharge() {
-    const box = document.getElementById('recharge-box');
-    box.classList.toggle('hidden');
-
-    // If recharge mode is active, disable balance method
-    const balanceBox = document.getElementById('balance-box');
-    if (!box.classList.contains('hidden')) {
-      balanceBox.classList.add('disabled');
-    } else {
-      balanceBox.classList.remove('disabled');
-    }
-}
-
-
 async function updateUserData(cardId, amount) {
     try {
         const res = await fetch('/clients/recharge', {
@@ -381,7 +367,6 @@ async function updateUserData(cardId, amount) {
             document.getElementById('client-balance').textContent = data.newBalance.toFixed(2);
             document.getElementById('recharge-box').classList.add('hidden');
             document.getElementById('recharge-amount').value = '';
-            document.getElementById('balance-box').classList.remove('disabled');
         } else {
             alert("Recharge failed");
         }
@@ -472,6 +457,19 @@ function toggleRecharge() {
 }
 
 
+function disablePayment() {
+    document.querySelectorAll('.method-box').forEach(elm => {
+        elm.classList.add('disabled');
+    })
+}
+
+function unablePayment() {
+    document.querySelectorAll('.method-box').forEach(elm => {
+        elm.classList.remove('disabled');
+    })
+}
+
+
 function paymentSuccesful() {
     const container = document.createElement('div');
     container.id = 'confirmation';
@@ -489,14 +487,16 @@ function paymentSuccesful() {
     button.onclick = () => {
         showSection('guest-selection');
         container.remove();
+        unablePayment();
     };
 
     container.appendChild(button);
 
     // Ajouter le div à la page
     let elm = document.getElementById("payment").firstElementChild;
-    console.log(elm);
     elm.appendChild(container);
+
+    disablePayment();
 }
 
 
@@ -557,6 +557,7 @@ async function submitOrder(paymentMethod) {
         const data = await res.json();
         // alert("Order saved successfully with payment method " + paymentMethod + ". Order ID: " + data.order_id);
         paymentSuccesful();
+
         order = [];
         renderOrder();
         showSection('payment');
