@@ -827,6 +827,11 @@ body {
   opacity: 0.4;
   pointer-events: none;
 }
+
+.recharge-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
   
 
 /*Hompegae for placing the order*/

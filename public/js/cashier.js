@@ -460,13 +460,16 @@ function toggleRecharge() {
 function disablePayment() {
     document.querySelectorAll('.method-box').forEach(elm => {
         elm.classList.add('disabled');
-    })
+    });
+    document.querySelector('.recharge-btn').classList.add('disabled');
+    
 }
 
 function unablePayment() {
     document.querySelectorAll('.method-box').forEach(elm => {
         elm.classList.remove('disabled');
-    })
+    });
+    document.querySelector('.recharge-btn').classList.remove('disabled');
 }
 
 
