@@ -49,7 +49,7 @@ These screens **automatically update** based on what the manager has configured.
 
 ## 🔐 Authentication
 
-Users can **log in or sign up**. When signing up, users choose their role: **Manager** or **Cashier**.
+Users can **log in or sign up** by clicking on the button corresponding to these actions on the homescreen. When signing up, users choose their role: **Manager** or **Cashier**.
 
 For testing purposes, two system accounts are pre-configured:
 
