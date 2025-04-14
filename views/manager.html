@@ -351,7 +351,7 @@
         <!-- Sidebar B: Order Details -->
         <aside class="order-details-sidebar" id="order-details-sidebar">
           <div class="sidebar-header">
-            <h3>Order <span id="selected-order-id">None</span></h3>         
+            <h3>Order <span id="selected-order-id"></span></h3>         
             <p><strong>Name:</strong> <span id="selected-client-name">-</span></p>
             <p><strong>Card Number:</strong> <span id="selected-card-id">-</span></p>
             <p><strong>Cashier:</strong> <span id="selected-cashier">-</span></p>
@@ -393,7 +393,7 @@
         orders.forEach(order => {
           const orderDate = new Date(order.date).toISOString().split('T')[0];
 
-          // ✅ Filter based on selected date
+          // Filter based on selected date
           if (selectedDateOnly && orderDate !== selectedDateOnly) return;
 
           let items;
