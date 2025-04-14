@@ -13,7 +13,7 @@
       <div class="sidebar-top">
         <button onclick="showSection('menu')">
           <img src="/images/menuicon.png" alt="Menu" class="sidebar-icon">
-          <span>Menu</span>
+          <span>Meals</span>
         </button>
         <button onclick="showSection('orders')">
           <img src="/images/ordersicon.png" alt="Orders" class="sidebar-icon">
@@ -306,19 +306,6 @@
         </div>
       </div>   -->
 
-      <div class="orders-summary-grid">
-        <div class="summary-card"><label>Total Income</label><div id="total-income">€0.00</div></div>
-        <div class="summary-card"><label>Total Orders</label><div id="total-orders">0</div></div>
-        <div class="summary-card"><label>Meat Ordered</label><div id="meat-count">0</div></div>
-        <div class="summary-card"><label>Fish Ordered</label><div id="fish-count">0</div></div>
-        <div class="summary-card"><label>Vegetarian Ordered</label><div id="vegetarian-count">0</div></div>
-        <div class="summary-card"><label>Desserts Ordered</label><div id="dessert-count">0</div></div>
-      </div>
-      
-      
-      
-      
-      
       <!-- Orders Header with Date Picker -->
       <div class="orders-header-bar">
         <div class="orders-header-left">
@@ -329,6 +316,18 @@
           </div>
         </div>
       </div>
+
+
+      <div class="orders-summary-grid">
+        <div class="summary-card"><label>Total Income</label><div id="total-income">€0.00</div></div>
+        <div class="summary-card"><label>Total Orders</label><div id="total-orders">0</div></div>
+        <div class="summary-card"><label>Starters Ordered</label><div id="starter-count">0</div></div>
+        <div class="summary-card"><label>Meat Ordered</label><div id="meat-count">0</div></div>
+        <div class="summary-card"><label>Fish Ordered</label><div id="fish-count">0</div></div>
+        <div class="summary-card"><label>Vegetarian Ordered</label><div id="vegetarian-count">0</div></div>
+        <div class="summary-card"><label>Desserts Ordered</label><div id="dessert-count">0</div></div>
+      </div>
+      
 
       <!-- Lower Orders Area -->
       <div class="orders-lower">
@@ -389,7 +388,7 @@
         // Variables for aggregated data
         let totalIncome = 0;
         let totalOrders = 0;
-        let meatCount = 0, fishCount = 0, vegetarianCount = 0, dessertCount = 0;
+        let starterCount=0, meatCount = 0, fishCount = 0, vegetarianCount = 0, dessertCount = 0;
 
         orders.forEach(order => {
           const orderDate = new Date(order.date).toISOString().split('T')[0];
@@ -414,6 +413,7 @@
             orderItemCount += qty;
 
             switch ((item.meal_type || '').toLowerCase()) {
+              case 'starter': starterCount +=qty; break;
               case 'meat': meatCount += qty; break;
               case 'fish': fishCount += qty; break;
               case 'vegetarian': vegetarianCount += qty; break;
@@ -450,6 +450,7 @@
         // Update summary fields
         document.getElementById('total-income').textContent = `€${totalIncome.toFixed(2)}`;
         document.getElementById('total-orders').textContent = totalOrders;
+        document.getElementById('starter-count').textContent = starterCount;
         document.getElementById('meat-count').textContent = meatCount;
         document.getElementById('fish-count').textContent = fishCount;
         document.getElementById('vegetarian-count').textContent = vegetarianCount;
@@ -518,47 +519,82 @@
           sidebarContent.innerHTML = '<p>No order selected.</p>';
           return;
         }
+      
         let items;
         try {
           items = JSON.parse(selectedOrder.items);
-        } catch(e) {
+        } catch (e) {
           sidebarContent.innerHTML = '<p>Error reading order details.</p>';
           return;
         }
-        // Group items: main courses vs. dessert
-        let mainCourses = [];
-        let desserts = [];
+      
+        // Group items
+        const starters = [];
+        const mains = [];
+        const desserts = [];
+      
         items.forEach(item => {
           const type = (item.meal_type || '').toLowerCase();
-          if (type === 'dessert') {
+          if (type === 'starter') {
+            starters.push(item);
+          } else if (type === 'dessert') {
             desserts.push(item);
           } else {
-            mainCourses.push(item);
+            mains.push(item);
           }
         });
+      
+        function renderGroup(title, items) {
+          if (items.length === 0) return;
         
-        if (mainCourses.length > 0) {
-          const mainHeader = document.createElement('h4');
-          mainHeader.textContent = 'Main Courses';
-          sidebarContent.appendChild(mainHeader);
-          mainCourses.forEach(item => {
-            const p = document.createElement('p');
-            p.textContent = `${item.meal_name} (x${item.quantity || 1}) - €${(item.meal_price * (item.quantity || 1)).toFixed(2)}`;
-            sidebarContent.appendChild(p);
+          const header = document.createElement('h4');
+          header.textContent = title;
+          sidebarContent.appendChild(header);
+        
+          const table = document.createElement('table');
+          table.style.width = '100%';
+          table.style.borderCollapse = 'collapse';
+        
+          // Table header
+          const headerRow = document.createElement('tr');
+          ['Meal', 'Quantity', 'Total'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            th.style.textAlign = 'left';
+            th.style.padding = '4px';
+            headerRow.appendChild(th);
           });
+          table.appendChild(headerRow);
+        
+          // Table rows
+          items.forEach(item => {
+            const row = document.createElement('tr');
+        
+            const nameCell = document.createElement('td');
+            nameCell.textContent = item.meal_name;
+            nameCell.style.padding = '4px';
+        
+            const qtyCell = document.createElement('td');
+            qtyCell.textContent = item.quantity || 1;
+            qtyCell.style.padding = '4px';
+        
+            const priceCell = document.createElement('td');
+            priceCell.textContent = `€${(item.meal_price * (item.quantity || 1)).toFixed(2)}`;
+            priceCell.style.padding = '4px';
+        
+            row.append(nameCell, qtyCell, priceCell);
+            table.appendChild(row);
+          });
+        
+          sidebarContent.appendChild(table);
         }
         
-        if (desserts.length > 0) {
-          const dessertHeader = document.createElement('h4');
-          dessertHeader.textContent = 'Dessert';
-          sidebarContent.appendChild(dessertHeader);
-          desserts.forEach(item => {
-            const p = document.createElement('p');
-            p.textContent = `${item.meal_name} (x${item.quantity || 1}) - €${(item.meal_price * (item.quantity || 1)).toFixed(2)}`;
-            sidebarContent.appendChild(p);
-          });
-        }
+      
+        renderGroup('Starters', starters);
+        renderGroup('Main Courses', mains);
+        renderGroup('Desserts', desserts);
       }
+      
     
       function showPaymentDetails() {
         const sidebarContent = document.getElementById('sidebar-content');
