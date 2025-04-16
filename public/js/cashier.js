@@ -394,8 +394,8 @@ function selectMethod(method) {
       if (box) box.classList.add('selected');
     }
 
-    endCustomer();
     submitOrder(method);
+    endCustomer();
 }
 
 
