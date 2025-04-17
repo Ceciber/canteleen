@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    overflow-x: hidden;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e3a8a; /* blue */
+    color: white;
+    padding: 1rem 2rem;
+}
+
+.auth-buttons .auth-btn {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #e5e7eb; /* light grey */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logo {
+    height: 40px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
